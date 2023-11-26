@@ -1,0 +1,26 @@
+NAME = fractol
+
+DEF_COLOR = \033[0;39m
+RED = \033[0;38;5;162m
+RED2 = \033[0;31m
+
+CC = cc
+FLAGS = -Wall -Werror -Wextra
+RM = rm -rf
+
+SRC = $(NAME).c
+OBJ = $(SRC:.c=.o)
+
+all:	@ $(CC) $(FLAGS) -o $(NAME) $(OBJ)
+		@echo "$(RED)map rdy$(DEF_COLOR)"
+
+clean:
+
+fclean: @ $(RM) $(OBJ)
+		@ $(RM) $(NAME)
+
+re:
+
+norm:
+
+.PHONY: all libft clean fclean re norm
