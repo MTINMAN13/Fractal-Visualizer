@@ -14,7 +14,7 @@ there is logarithm
 sin. cos, tan acos, asin, atan, cosh and sinh
 
 
-Your program must offer the Julia (modifiable w params) set and the Mandelbrot set.
+Your program must offer the Julia (modifiable w params) set and the Mandelbrot set. (and burning ship or others)
 when no param or bad param is provided, display instruct. and exit
 
 few colors
