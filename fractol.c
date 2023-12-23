@@ -8,10 +8,14 @@
 
 int		die(char *reason)
 {
+	ft_pntf("hello this is dog yes");
+	ft_pntf("okay letsgo");
 	ft_putendl_fd(reason, 1);
 	return (1);
 }
 
+//  LETSGOOOO
+// autosave where
 // int		main(int argc, char **argv)
 // {
 // 	t_mlx		*mlx;
