@@ -18,7 +18,7 @@ INCLUDE = include
 
 # Sources
 SRC_FILES = fractol fractol_event_things \
-			fractol_hooks 
+			fractol_hooks fractol_mandelbrot 
 
 SRC = $(addsuffix .c, $(SRC_FILES))
 OBJ = $(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(SRC_FILES)))

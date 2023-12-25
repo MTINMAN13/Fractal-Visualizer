@@ -6,7 +6,7 @@
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/19 20:45:12 by mman              #+#    #+#             */
-/*   Updated: 2023/12/26 00:12:16 by mman             ###   ########.fr       */
+/*   Updated: 2023/12/26 00:34:56 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,5 +34,9 @@ int		close_window_event(int keycode, t_vars *vars);
 void	setup_event_hooks(t_vars *vars);
 void	draw_pixel(t_vars *vars, int x, int y, int color);
 int		close_window(void *param);
+
+// Mandelbrot 
+void    ft_do_mandelbrot(t_vars *vars);
+
 
 #endif
