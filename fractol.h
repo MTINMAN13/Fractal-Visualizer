@@ -6,7 +6,7 @@
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/19 20:45:12 by mman              #+#    #+#             */
-/*   Updated: 2023/12/23 21:15:51 by mman             ###   ########.fr       */
+/*   Updated: 2023/12/26 00:12:16 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,19 @@
 # include <stdio.h>
 # include <time.h>
 
+typedef struct	s_vars {
+	void	*mlx;
+	void	*win;
+}				t_vars;
 
+// Event handling functions
+int		key_hook(int keycode, t_vars *vars);
+int		mouse_hook(int button, int x, int y, t_vars *vars);
+int		close_window_event(int keycode, t_vars *vars);
+
+// Utility functions
+void	setup_event_hooks(t_vars *vars);
+void	draw_pixel(t_vars *vars, int x, int y, int color);
+int		close_window(void *param);
 
 #endif
