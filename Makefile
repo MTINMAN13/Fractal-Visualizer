@@ -64,6 +64,7 @@ norm:
 		@norminette $(NAME).c $(NAME).h
 
 run:
+		make $(NAME)
 		@clear
 		@echo "$(CLR2)--------- clean program run ---------$(DEF_COLOR)"
 		./$(NAME)
