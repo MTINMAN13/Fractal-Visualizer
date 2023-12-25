@@ -6,7 +6,7 @@
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/23 17:11:13 by mman              #+#    #+#             */
-/*   Updated: 2023/12/26 00:26:47 by mman             ###   ########.fr       */
+/*   Updated: 2023/12/26 00:42:01 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,14 @@ int	main(void)
 	// Set up event hooks
 	setup_event_hooks(&vars);
 
-	draw_pixel(&vars, 100, 100, 0xFF0000);
+    ft_do_mandelbrot(&vars);
 	mlx_loop(vars.mlx);
 	mlx_destroy_window(vars.mlx, vars.win);
 
 	return (0);
+}
+
+void    ft_do_mandelbrot(t_vars *vars)
+{
+	draw_pixel(vars, 100, 100, 0xFF0000);
 }
