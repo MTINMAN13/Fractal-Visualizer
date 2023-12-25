@@ -8,7 +8,7 @@ CLR1 = \033[0;48m  # Complementary orangeish color with a random last digit
 
 
 CC = cc
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = #-Wall -Werror -Wextra
 RM = rm -rf
 
 # Directories
@@ -23,14 +23,16 @@ SRC = $(addsuffix .c, $(SRC_FILES))
 OBJ = $(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(SRC_FILES)))
 
 LIBFT = libft.a
+MINILIBX = minilibx/libmlx_Linux.a
+LFLAGS = -Lminilibx -lmlx -lXext -lX11 -lm #okay this cost me .... fml lol
 
 # Rule to compile .c files into .o files
 $(OBJ_DIR)/%.o: %.c
-	$(CC) $(CFLAGS) -I$(INCLUDE) -c $< -o $@
+	$(CC) $(CFLAGS) -I$(INCLUDE) -c $< -o $@ 
 
 # Rule to build the executable  and run
 $(NAME): libft $(OBJ)
-	$(CC) $(CFLAGS) -o $@ $(OBJ) $(LIBFT)
+	$(CC) $(CFLAGS) -o $@ $(OBJ) $(LIBFT) $(LFLAGS)
 	@clear
 	@echo "$(CLR2)rdy$(DEF_COLOR)"
 

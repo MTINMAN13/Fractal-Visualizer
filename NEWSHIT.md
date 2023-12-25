@@ -31,3 +31,10 @@ Your program has to display the image in a window.
 • Mouse Wheel Zoom (Set on Location)
 
 • JULIA 
+
+
+--------------------
+
+0: This parameter is used for configuring the behavior of the event hook. In this case, 0 means that the hook will be triggered every time the event occurs.
+
+2: This is the event code for the "KeyPress" event. The number 2 corresponds to the KeyPress event in X11, and it indicates that the associated hook function (key_press in this case) will be called when a key is pressed.
