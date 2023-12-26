@@ -34,7 +34,7 @@ $(OBJ_DIR)/%.o: %.c
 # Rule to build the executable  and run
 $(NAME): libft $(OBJ)
 	$(CC) $(CFLAGS) -o $@ $(OBJ) $(LIBFT) $(LFLAGS)
-	@clear
+	# @clear 
 	@echo "$(CLR2)rdy$(DEF_COLOR)"
 
 

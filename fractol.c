@@ -6,7 +6,7 @@
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/23 17:11:13 by mman              #+#    #+#             */
-/*   Updated: 2023/12/26 00:42:01 by mman             ###   ########.fr       */
+/*   Updated: 2023/12/26 11:00:56 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,13 @@ int	main(void)
 	t_vars	vars;
 
 	vars.mlx = mlx_init();
-	vars.win = mlx_new_window(vars.mlx, 640, 480, "Hello world!");
+	vars.win = mlx_new_window(vars.mlx, WIDTH, HEIGHT, "Fractol");
 
 	// Set up event hooks
 	setup_event_hooks(&vars);
-
+	// Carry out Mandelbrot shenanagans
     ft_do_mandelbrot(&vars);
+	
 	mlx_loop(vars.mlx);
 	mlx_destroy_window(vars.mlx, vars.win);
 
