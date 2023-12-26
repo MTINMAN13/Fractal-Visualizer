@@ -17,7 +17,8 @@ OBJ_DIR = obj
 INCLUDE = include
 
 # Sources
-SRC_FILES = fractol
+SRC_FILES = fractol fractol_event_things \
+			fractol_hooks 
 
 SRC = $(addsuffix .c, $(SRC_FILES))
 OBJ = $(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(SRC_FILES)))
@@ -33,7 +34,7 @@ $(OBJ_DIR)/%.o: %.c
 # Rule to build the executable  and run
 $(NAME): libft $(OBJ)
 	$(CC) $(CFLAGS) -o $@ $(OBJ) $(LIBFT) $(LFLAGS)
-	@clear
+	# @clear 
 	@echo "$(CLR2)rdy$(DEF_COLOR)"
 
 
