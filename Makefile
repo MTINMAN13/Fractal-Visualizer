@@ -17,8 +17,9 @@ OBJ_DIR = obj
 INCLUDE = include
 
 # Sources
-SRC_FILES = fractol fractol_event_things \
-			fractol_hooks 
+SRC_FILES = fractol \
+			fractol_hooks fractol_mandelbrot \
+			fractol_program_stuff
 
 SRC = $(addsuffix .c, $(SRC_FILES))
 OBJ = $(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(SRC_FILES)))
@@ -73,5 +74,9 @@ run:
 		@echo
 		@echo "$(CLR2)--------- clean program run ---------$(DEF_COLOR)"
 
+valgrind:
+		valgrind --leak-check=full ./$(NAME)
+
 
 .PHONY: all libft clean fclean re norm $(NAME) run
+
