@@ -4,7 +4,7 @@ int key_hook(int keycode, t_vars *vars)
 {
     printf("Hello from key_hook * %i!\n", keycode);
     if (keycode == 65307) // 65307 is the keycode for the ESC key
-        close_window();
+        close_window(vars);
     return (0);
 }
 
@@ -22,15 +22,16 @@ void setup_event_hooks(t_vars *vars)
     mlx_mouse_hook(vars->win, mouse_hook, vars); // Add the mouse hook
 }
 
-int close_window(void)
+int close_window(t_vars *vars)
 {
     printf("Window Closed\n");
+   	ft_cleanup_all(*vars);
     exit(0);
     return (0);
 }
 
 int close_window_event(t_vars *vars)
 {
-    close_window();
+    close_window(vars);
     return (0);
 }

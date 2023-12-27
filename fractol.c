@@ -6,7 +6,7 @@
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/23 17:11:13 by mman              #+#    #+#             */
-/*   Updated: 2023/12/26 11:00:56 by mman             ###   ########.fr       */
+/*   Updated: 2023/12/27 20:36:28 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,20 +17,13 @@ int	main(void)
 	t_vars	vars;
 
 	vars.mlx = mlx_init();
-	vars.win = mlx_new_window(vars.mlx, WIDTH, HEIGHT, "Fractol");
-
-	// Set up event hooks
-	setup_event_hooks(&vars);
-	// Carry out Mandelbrot shenanagans
-    ft_do_mandelbrot(&vars);
-	
-	mlx_loop(vars.mlx);
-	mlx_destroy_window(vars.mlx, vars.win);
-
+	vars.win = mlx_new_window(vars.mlx, SIDE_LEN, SIDE_LEN, "Fractol");
+	if (vars.mlx == 0 || vars.win == NULL)
+		ft_error("exit code");
+	vars.img.img_ptr = mlx_new_image(vars.mlx, SIDE_LEN, SIDE_LEN);
+	vars.img.img_pixels_ptr = mlx_get_data_addr(vars.img.img_ptr, &vars.img.bits_per_pixel, &vars.img.line_len, &vars.img.endian);
+	ft_program(vars);
+	ft_cleanup_all(vars);
 	return (0);
 }
 
-void    ft_do_mandelbrot(t_vars *vars)
-{
-	draw_pixel(vars, 100, 100, 0xFF0000);
-}
