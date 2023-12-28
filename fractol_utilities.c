@@ -1,23 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fractol_constants.h                                :+:      :+:    :+:   */
+/*   fractol_program_stuff.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/19 20:45:12 by mman              #+#    #+#             */
-/*   Updated: 2023/12/27 20:17:52 by mman             ###   ########.fr       */
+/*   Created: 2023/12/27 20:31:45 by mman              #+#    #+#             */
+/*   Updated: 2023/12/28 20:01:23 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FRACTOL_CONSTANTS_H
-# define FRACTOL_CONSTANTS_H
+#include "fractol.h"
 
-# define WIDTH 600
-# define HEIGHT 400
-# define SIDE_LEN 800
-// courtesy of nmei
-# define RANGE_CHANGE(x,a,b,min,max) (((b)-(a))*((x)-(min))/((max)-(min)))+(a)
-
-
-#endif
+void	ft_error(char *str)
+{
+	ft_pntf(str);
+	exit(1);
+}

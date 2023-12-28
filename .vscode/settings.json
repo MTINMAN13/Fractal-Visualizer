@@ -2,6 +2,7 @@
 	"files.associations": {
 		"keysym.h": "c",
 		"mlx.h": "c",
-		"fractol.h": "c"
+		"fractol.h": "c",
+		"limits": "c"
 	}
 }
