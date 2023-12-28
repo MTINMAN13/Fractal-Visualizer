@@ -6,7 +6,7 @@
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/19 20:45:12 by mman              #+#    #+#             */
-/*   Updated: 2023/12/28 20:02:52 by mman             ###   ########.fr       */
+/*   Updated: 2023/12/28 20:19:49 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,32 +44,16 @@ typedef struct	s_mlxdata
 	t_complex	max;
 }				t_mlxdata;
 
-typedef struct s_img
-{
-	void	*img_ptr;
-	char	*img_pixels_ptr;
-	int		bits_per_pixel;
-	int		endian;
-	int		line_len;
-}				t_img;
-
-typedef struct	s_vars
-{
-	void	*mlx;
-	void	*win;
-	t_img	img;
-}				t_vars;
-
 // Event handling functions
-int		key_hook(int keycode, t_vars *vars);
-int		mouse_hook(int button, int x, int y, t_vars *vars);
-int		close_window(t_vars *vars);
-int		close_window_event(t_vars *vars);
+int		key_hook(int keycode, t_mlxdata *mlxdata);
+int		mouse_hook(int button, int x, int y, t_mlxdata *mlxdata);
+int		close_window(t_mlxdata *mlxdata);
+int		close_window_event(t_mlxdata *mlxdata);
 void	setup_event_hooks(t_mlxdata *mlxdata);
 void	ft_error(char *str);
 
 // Utility functions
-void	draw_pixel(t_img *img, int x, int y, int color);
+
 
 // Mandelbrot 
 // new
