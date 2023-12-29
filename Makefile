@@ -75,7 +75,7 @@ run:
 		@echo "$(CLR2)--------- clean program run ---------$(DEF_COLOR)"
 
 valgrind:
-		valgrind --leak-check=full ./$(NAME)
+		valgrind --leak-check=full --show-leak-kinds=all ./$(NAME)
 
 
 .PHONY: all libft clean fclean re norm $(NAME) run
