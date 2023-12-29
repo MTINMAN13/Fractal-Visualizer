@@ -6,7 +6,7 @@
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/19 20:45:12 by mman              #+#    #+#             */
-/*   Updated: 2023/12/28 20:19:49 by mman             ###   ########.fr       */
+/*   Updated: 2023/12/29 11:44:05 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,15 @@
 # include <stdio.h>
 # include <time.h>
 
-# define WIDTH 600
-# define HEIGHT 400
+# define WIDTH 1200
+# define HEIGHT 800
 
+
+typedef struct	s_center_axis
+{
+	double x;
+	double y;
+}				t_center_axis;
 
 typedef struct	s_complex
 {

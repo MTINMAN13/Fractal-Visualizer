@@ -6,7 +6,7 @@
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/23 17:11:13 by mman              #+#    #+#             */
-/*   Updated: 2023/12/28 20:06:39 by mman             ###   ########.fr       */
+/*   Updated: 2023/12/29 11:42:53 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,32 +84,50 @@ int		mandelbrot_iteration(t_complex c, int max_iter)
 {
 	t_complex	z;
 	int			iter;
+	double		real_tmp;
+	double		imag_tmp;
 
 	z.real = 0;
 	z.imag = 0;
 	iter = 0;
 	while (iter < max_iter)
 	{
-		double real_tmp = z.real * z.real - z.imag * z.imag + c.real;
-		double imag_tmp = 2 * z.real * z.imag + c.imag;
-
+		real_tmp = z.real * z.real - z.imag * z.imag + c.real;
+		imag_tmp = 2 * z.real * z.imag + c.imag;
 		z.real = real_tmp;
 		z.imag = imag_tmp;
-
 		if (z.real * z.real + z.imag * z.imag > 4)
 			break;
-
 		iter++;
 	}
 	return (iter);
 }
 
-void	draw_mandelbrot(t_mlxdata *mlxdata, int max_iter)
+static void	process_pixel(t_mlxdata *mlxdata, int x, int y, double dx, double dy, int max_iter)
 {
-	int		x;
-	int		y;
-	double	dx;
-	double	dy;
+	// Adjust the calculation of c to take into account the zoom factor
+	t_complex	c;
+	int			iter;
+	int			color;
+	int			pixel_index;
+
+	c.real = mlxdata->min.real + x * dx * mlxdata->zoom;
+	c.imag = mlxdata->min.imag + y * dy * mlxdata->zoom;
+
+	iter = mandelbrot_iteration(c, max_iter);
+	color = calculate_color(iter, max_iter);
+	pixel_index = (y * mlxdata->line_length) + (x * (mlxdata->bits_per_pixel / 8));
+	mlxdata->addr[pixel_index] = color >> 16; // Red
+	mlxdata->addr[pixel_index + 1] = color >> 8; // Green
+	mlxdata->addr[pixel_index + 2] = color; // Blue
+}
+
+void		draw_mandelbrot(t_mlxdata *mlxdata, int max_iter)
+{
+	int			x;
+	int			y;
+	double		dx;
+	double		dy;
 
 	dx = (mlxdata->max.real - mlxdata->min.real) / WIDTH;
 	dy = (mlxdata->max.imag - mlxdata->min.imag) / HEIGHT;
@@ -118,18 +136,6 @@ void	draw_mandelbrot(t_mlxdata *mlxdata, int max_iter)
 	{
 		x = -1;
 		while (++x < WIDTH)
-		{
-			t_complex c;
-			c.real = mlxdata->min.real + x * dx;
-			c.imag = mlxdata->min.imag + y * dy;
-
-			int iter = mandelbrot_iteration(c, max_iter);
-			int color = calculate_color(iter, max_iter);
-
-			int pixel_index = (y * mlxdata->line_length) + (x * (mlxdata->bits_per_pixel / 8));
-			mlxdata->addr[pixel_index] = color >> 16; // Red
-			mlxdata->addr[pixel_index + 1] = color >> 8; // Green
-			mlxdata->addr[pixel_index + 2] = color; // Blue
-		}
+			process_pixel(mlxdata, x, y, dx, dy, max_iter);
 	}
 }
