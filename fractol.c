@@ -6,7 +6,7 @@
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/23 17:11:13 by mman              #+#    #+#             */
-/*   Updated: 2023/12/30 18:55:08 by mman             ###   ########.fr       */
+/*   Updated: 2023/12/30 19:54:42 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,29 @@
 // 	return (0);
 // }
 
-#include "fractol.h"
+/*                   B O N U S                                                     .
+One more different fractal (more than a hundred different types of fractals are
+referenced online).
+• The zoom follows the actual mouse position.
+• In addition to the zoom: moving the view by pressing the arrows keys.
+• Make the color range shift.
+                                                                                  .
+*/
 
 
-
-
-
+/*                   T O D O                                                     .
+mouse 4 and 5 zoom in and out
+Your program must offer the Julia set and the Mandelbrot set.
+You must be able to create different Julia sets by passing different parameters to
+the program.
+A parameter is passed on the command line to define what type of fractal will be
+displayed in a window.
+◦ You can handle more parameters to use them as rendering options.
+◦ If no parameter is provided, or if the parameter is invalid, the program displays
+a list of available parameters and exits properly.
+solve leaks in memory
+                                                                                  .
+*/
 void	ft_adjust_render(t_mlxdata *mlxdata, char dir_sign, char real_imag_sign, double move_step)
 {
 	if (dir_sign == '+')
@@ -100,9 +117,9 @@ int	key_hook(int keycode, t_mlxdata *mlxdata)
 	double move_step = 0.1 * mlxdata->zoom; // Calculate the proportional movement step
 	if (keycode == 65307) // 65307 is the keycode for the ESC key
 		close_window(mlxdata);
-	else if (keycode == 505 || keycode == 59) // ; (ZOOM OUT)
+	else if (keycode == 505 || keycode == 59 || keycode == 65453) // ; (ZOOM OUT)
         ft_zoom_out(mlxdata, WIDTH / 2, HEIGHT / 2, 1.1);
-	else if (keycode == 167 || keycode == 39) // : (ZOOM IN)
+	else if (keycode == 167 || keycode == 39 || keycode == 65451) // : (ZOOM IN)
         ft_zoom_in(mlxdata, WIDTH / 2, HEIGHT / 2, 1.0 / 1.1);
 	else if (keycode == 61) // - (RESET)
 		ft_default_zoom(mlxdata);
@@ -116,7 +133,7 @@ int	key_hook(int keycode, t_mlxdata *mlxdata)
 		ft_adjust_render(mlxdata, '+', 'r', move_step);
 	else if (keycode == 0)
 		ft_pntf("REAL: %i \nIMAG: %i \nZOOM; %i", mlxdata->min.real, mlxdata->max.imag, mlxdata->zoom);
-	else if (keycode == 233 || keycode == 48) // Key with code 233 (adjust as needed)
+	else if (keycode == 233 || keycode == 48 || keycode == 65438) // Key with code 233 (adjust as needed)
 		ft_color_switch(mlxdata);
 	draw_mandelbrot(mlxdata, 100);
 	mlx_put_image_to_window(mlxdata->mlx, mlxdata->win, mlxdata->img, 0, 0);
