@@ -6,7 +6,7 @@
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/23 17:11:13 by mman              #+#    #+#             */
-/*   Updated: 2023/12/30 17:54:37 by mman             ###   ########.fr       */
+/*   Updated: 2023/12/30 18:55:08 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,9 +100,9 @@ int	key_hook(int keycode, t_mlxdata *mlxdata)
 	double move_step = 0.1 * mlxdata->zoom; // Calculate the proportional movement step
 	if (keycode == 65307) // 65307 is the keycode for the ESC key
 		close_window(mlxdata);
-	else if (keycode == 505) // ; (ZOOM OUT)
+	else if (keycode == 505 || keycode == 59) // ; (ZOOM OUT)
         ft_zoom_out(mlxdata, WIDTH / 2, HEIGHT / 2, 1.1);
-	else if (keycode == 167) // : (ZOOM IN)
+	else if (keycode == 167 || keycode == 39) // : (ZOOM IN)
         ft_zoom_in(mlxdata, WIDTH / 2, HEIGHT / 2, 1.0 / 1.1);
 	else if (keycode == 61) // - (RESET)
 		ft_default_zoom(mlxdata);
@@ -116,7 +116,7 @@ int	key_hook(int keycode, t_mlxdata *mlxdata)
 		ft_adjust_render(mlxdata, '+', 'r', move_step);
 	else if (keycode == 0)
 		ft_pntf("REAL: %i \nIMAG: %i \nZOOM; %i", mlxdata->min.real, mlxdata->max.imag, mlxdata->zoom);
-	else if (keycode == 233) // Key with code 233 (adjust as needed)
+	else if (keycode == 233 || keycode == 48) // Key with code 233 (adjust as needed)
 		ft_color_switch(mlxdata);
 	draw_mandelbrot(mlxdata, 100);
 	mlx_put_image_to_window(mlxdata->mlx, mlxdata->win, mlxdata->img, 0, 0);
@@ -276,10 +276,10 @@ void calculate_smooth_color_two(double angle, int *r, int *g, int *b, int max_it
 // {
 //     // Modified color logic with additional hues for a smoother loop back to the initial color
 //     double t = angle / (2 * M_PI);
-    
+
 //     // Use a sinusoidal function to create a smooth loop back
 //     double modulation = 0.5 + 0.5 * sin((t + 0.5) * M_PI);
-    
+
 //     // Adjust t with the modulation factor to control the loop frequency
 //     t = fmod(t + 0.5 * modulation, 1.0);
 
