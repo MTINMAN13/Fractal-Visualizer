@@ -6,7 +6,7 @@
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/23 17:11:13 by mman              #+#    #+#             */
-/*   Updated: 2023/12/30 00:56:46 by mman             ###   ########.fr       */
+/*   Updated: 2023/12/30 17:54:37 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,24 +76,23 @@ void	ft_color_switch(t_mlxdata *mlxdata)
 		ft_pntf("Switched to color mode 1\n");
 	}
 }
-void ft_adjust_zoom(t_mlxdata *mlxdata, int x, int y, double zoom_factor)
-{
-    double center_real = mlxdata->min.real + x / (double)WIDTH * (mlxdata->max.real - mlxdata->min.real);
-    double center_imag = mlxdata->min.imag + y / (double)HEIGHT * (mlxdata->max.imag - mlxdata->min.imag);
 
-    mlxdata->min.real = center_real - (mlxdata->max.real - mlxdata->min.real) / (2 * zoom_factor);
-    mlxdata->max.real = center_real + (mlxdata->max.real - mlxdata->min.real) / (2 * zoom_factor);
-    mlxdata->min.imag = center_imag - (mlxdata->max.imag - mlxdata->min.imag) / (2 * zoom_factor);
-    mlxdata->max.imag = center_imag + (mlxdata->max.imag - mlxdata->min.imag) / (2 * zoom_factor);
+void ft_zoom_in(t_mlxdata *mlxdata, int x, int y, double zoom_factor)
+{
+	mlxdata->zoom *= zoom_factor;
+	double move_step = 0.1738 * mlxdata->zoom; // Calculate the proportional movement step
+	ft_adjust_render(mlxdata, '+', 'r', move_step);
+	ft_adjust_render(mlxdata, '+', 'i', move_step);
 }
 
-
-
-void ft_zoomies(t_mlxdata *mlxdata, int x, int y, double zoom_factor)
+void ft_zoom_out(t_mlxdata *mlxdata, int x, int y, double zoom_factor)
 {
-    mlxdata->zoom *= zoom_factor;
-    ft_adjust_zoom(mlxdata, x, y, 1.0 / zoom_factor);
+	mlxdata->zoom *= zoom_factor;
+	double move_step = 0.1738 * mlxdata->zoom; // Calculate the proportional movement step
+	ft_adjust_render(mlxdata, '-', 'r', move_step);
+	ft_adjust_render(mlxdata, '-', 'i', move_step);
 }
+
 
 int	key_hook(int keycode, t_mlxdata *mlxdata)
 {
@@ -102,9 +101,9 @@ int	key_hook(int keycode, t_mlxdata *mlxdata)
 	if (keycode == 65307) // 65307 is the keycode for the ESC key
 		close_window(mlxdata);
 	else if (keycode == 505) // ; (ZOOM OUT)
-        ft_zoomies(mlxdata, WIDTH / 2, HEIGHT / 2, 1.1);
+        ft_zoom_out(mlxdata, WIDTH / 2, HEIGHT / 2, 1.1);
 	else if (keycode == 167) // : (ZOOM IN)
-        ft_zoomies(mlxdata, WIDTH / 2, HEIGHT / 2, 1.0 / 1.1);
+        ft_zoom_in(mlxdata, WIDTH / 2, HEIGHT / 2, 1.0 / 1.1);
 	else if (keycode == 61) // - (RESET)
 		ft_default_zoom(mlxdata);
 	else if (keycode == 119) // W (move up)
@@ -202,10 +201,9 @@ void		draw_mandelbrot(t_mlxdata *mlxdata, int max_iter)
 
 void calculate_smooth_color(double angle, int *r, int *g, int *b)
 {
-    // Use HSL color space for smoother transitions
-    double hue = fmod(angle / (2 * M_PI), 1.0); // Normalize angle to [0, 1)
-    double saturation = 1.0; // Full saturation
-    double lightness = 0.5;  // Adjust the lightness as needed
+    double hue = fmod(angle / (2 * M_PI), 1.0);
+    double saturation = 1.0;
+    double lightness = 0.5;
 
     double chroma = (1 - fabs(2 * lightness - 1)) * saturation;
     double hue_ = 6 * hue;
@@ -255,6 +253,64 @@ void calculate_smooth_color(double angle, int *r, int *g, int *b)
     *b = (int)((b_ + m) * 255);
 }
 
+
+
+
+// #include <math.h>
+
+void calculate_smooth_color_two(double angle, int *r, int *g, int *b, int max_iter)
+{
+    // Modified color logic with a smoother loop through the entire RGB spectrum
+    double t = angle / (4 * M_PI);
+
+    // Use a sinusoidal function for each color component
+    *r = (int)(sin(2 * M_PI * t) * 127.5 + 127.5);
+    *g = (int)(sin(2 * M_PI * (t + 1.0 / 3.0)) * 127.5 + 127.5);
+    *b = (int)(sin(2 * M_PI * (t + 2.0 / 3.0)) * 127.5 + 127.5);
+}
+
+
+// #include <math.h>
+
+// void calculate_smooth_color_two(double angle, int *r, int *g, int *b, int max_iter)
+// {
+//     // Modified color logic with additional hues for a smoother loop back to the initial color
+//     double t = angle / (2 * M_PI);
+    
+//     // Use a sinusoidal function to create a smooth loop back
+//     double modulation = 0.5 + 0.5 * sin((t + 0.5) * M_PI);
+    
+//     // Adjust t with the modulation factor to control the loop frequency
+//     t = fmod(t + 0.5 * modulation, 1.0);
+
+//     *r = (int)(9 * (1 - t) * t * t * t * 255);
+//     *g = (int)(15 * (1 - t) * (1 - t) * t * t * 255);
+//     *b = (int)(8.5 * (1 - t) * (1 - t) * (1 - t) * t * 255);
+
+//     // Additional hues for a more varied color palette
+//     int lila_r = (int)(8.5 * (1 - t) * (1 - t) * t * t * 255);
+//     int lila_g = (int)(9 * (1 - t) * t * t * t * 255);
+//     int lila_b = (int)(15 * (1 - t) * (1 - t) * t * t * 255);
+
+//     int orange_r = (int)(15 * (1 - t) * (1 - t) * t * t * 255);
+//     int orange_g = (int)(8.5 * (1 - t) * (1 - t) * (1 - t) * t * 255);
+//     int orange_b = (int)(9 * (1 - t) * t * t * t * 255);
+
+//     // Blend the additional hues with the primary color based on the iteration count
+//     double blend_factor = (double)max_iter / 100.0; // Adjust as needed
+//     *r = (int)((1 - blend_factor) * *r + blend_factor * lila_r);
+//     *g = (int)((1 - blend_factor) * *g + blend_factor * lila_g);
+//     *b = (int)((1 - blend_factor) * *b + blend_factor * lila_b);
+
+//     // You can add more blending with other hues here based on the iteration count
+//     // For example, blend with orange based on the iteration count
+//     *r = (int)((1 - blend_factor) * *r + blend_factor * orange_r);
+//     *g = (int)((1 - blend_factor) * *g + blend_factor * orange_g);
+//     *b = (int)((1 - blend_factor) * *b + blend_factor * orange_b);
+// }
+
+
+
 int calculate_color(int iteration, int max_iter, int color_logic, int x, int y)
 {
     double t = (double)iteration / max_iter;
@@ -277,11 +333,13 @@ int calculate_color(int iteration, int max_iter, int color_logic, int x, int y)
         g = (int)(15 * (1 - t) * (1 - t) * t * t * 255);
         b = (int)(8.5 * (1 - t) * (1 - t) * (1 - t) * t * 255);
     }
-    else if (color_logic == 2)
-    {
-        // Smooth color transition for color logic 2
-        calculate_smooth_color(angle, &r, &g, &b);
-    }
+    // else if (color_logic == 2)
+    // {
+    //     // Smooth color transition for color logic 2
+    //     calculate_smooth_color(angle, &r, &g, &b);
+    // }
+	else if (color_logic == 2)
+        calculate_smooth_color_two(angle, &r, &g, &b, max_iter);
     else
     {
         // Handle unexpected input (optional)
@@ -295,7 +353,7 @@ int calculate_color(int iteration, int max_iter, int color_logic, int x, int y)
 
 void	ft_default_zoom(t_mlxdata *mlxdata)
 {
-	mlxdata->zoom = 0.5;
+	mlxdata->zoom = 0.666;
 	mlxdata->min.real = -2.0;
 	mlxdata->max.real = 2.0;
 	mlxdata->min.imag = -1.5;
