@@ -6,7 +6,7 @@
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/23 17:11:13 by mman              #+#    #+#             */
-/*   Updated: 2023/12/30 19:54:42 by mman             ###   ########.fr       */
+/*   Updated: 2024/01/01 18:15:44 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,16 +98,20 @@ void ft_zoom_in(t_mlxdata *mlxdata, int x, int y, double zoom_factor)
 {
 	mlxdata->zoom *= zoom_factor;
 	double move_step = 0.1738 * mlxdata->zoom; // Calculate the proportional movement step
-	ft_adjust_render(mlxdata, '+', 'r', move_step);
-	ft_adjust_render(mlxdata, '+', 'i', move_step);
+	mlxdata->min.real += move_step;
+	mlxdata->max.real += move_step;
+	mlxdata->min.imag += move_step;
+	mlxdata->max.imag += move_step;
 }
 
 void ft_zoom_out(t_mlxdata *mlxdata, int x, int y, double zoom_factor)
 {
 	mlxdata->zoom *= zoom_factor;
 	double move_step = 0.1738 * mlxdata->zoom; // Calculate the proportional movement step
-	ft_adjust_render(mlxdata, '-', 'r', move_step);
-	ft_adjust_render(mlxdata, '-', 'i', move_step);
+	mlxdata->min.real -= move_step;
+	mlxdata->max.real -= move_step;
+	mlxdata->min.imag -= move_step;
+	mlxdata->max.imag -= move_step;
 }
 
 
@@ -142,16 +146,37 @@ int	key_hook(int keycode, t_mlxdata *mlxdata)
 
 // ... (rest of the code remains unchanged)
 
-
-int	mouse_hook(int button, int x, int y, t_mlxdata *mlxdata)
+void ft_mouse_zoom_in(t_mlxdata *mlxdata, int x, int y, double zoom_factor)
 {
-	printf("Mouse button %d clicked at (%d, %d)\n", button, x, y);
-	// Add your mouse event handling logic here
-	if (button == 4)
-		mlxdata->zoom /= 1.04;
-	draw_mandelbrot(mlxdata, 100);
-	mlx_put_image_to_window(mlxdata->mlx, mlxdata->win, mlxdata->img, 0, 0);
-	return (0);
+	mlxdata->zoom *= zoom_factor;
+	double move_step = 0.1738 * mlxdata->zoom; // Calculate the proportional movement step
+	mlxdata->min.real += move_step;
+	mlxdata->max.real += move_step;
+	mlxdata->min.imag += move_step;
+	mlxdata->max.imag += move_step;
+}
+
+void ft_mouse_zoom_out(t_mlxdata *mlxdata, int x, int y, double zoom_factor)
+{
+	mlxdata->zoom *= zoom_factor;
+	double move_step = 0.1738 * mlxdata->zoom; // Calculate the proportional movement step
+	mlxdata->min.real -= move_step;
+	mlxdata->max.real -= move_step;
+	mlxdata->min.imag -= move_step;
+	mlxdata->max.imag -= move_step;
+}
+
+int mouse_hook(int button, int x, int y, t_mlxdata *mlxdata)
+{
+    printf("Mouse button %d clicked at (%d, %d)\n", button, x, y);
+    // Add your mouse event handling logic here
+    if (button == 4)
+        ft_mouse_zoom_out(mlxdata, x, y, 1.1);
+    else if (button == 5)
+        ft_mouse_zoom_in(mlxdata, x, y, 1.0 / 1.1);
+    draw_mandelbrot(mlxdata, 100);
+    mlx_put_image_to_window(mlxdata->mlx, mlxdata->win, mlxdata->img, 0, 0);
+    return (0);
 }
 
 int		mandelbrot_iteration(t_complex c, int max_iter)
