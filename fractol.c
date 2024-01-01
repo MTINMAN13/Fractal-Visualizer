@@ -6,7 +6,43 @@
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/23 17:11:13 by mman              #+#    #+#             */
-/*   Updated: 2024/01/01 19:12:22 by mman             ###   ########.fr       */
+/*   Updated: 2024/01/01 23:04:23 by mman             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "fractol.h"
+
+// int	main(void)
+// {
+// 	t_vars	vars;
+
+// 	vars.mlx = mlx_init();
+// 	vars.win = mlx_new_window(vars.mlx, SIDE_LEN, SIDE_LEN, "Fractol");
+// 	if (vars.mlx == 0 || vars.win == NULL)
+// 		ft_error("exit code");
+// 	vars.img.img_ptr = mlx_new_image(vars.mlx, SIDE_LEN, SIDE_LEN);
+// 	vars.img.img_pixels_ptr = mlx_get_data_addr(vars.img.img_ptr, &vars.img.bits_per_pixel, &vars.img.line_len, &vars.img.endian);
+// 	ft_program(vars);
+// 	ft_cleanup_all(vars);
+// 	return (0);
+// }
+
+/*                   B O N U S                                                     .
+One more different fractal (more than a hundred different types of fractals are
+referenced online).
+• The zoom follows the actual mouse position. ✅
+• In addition to the zoom: moving the view by pressing the arrows keys. ✅
+• Make the color range shift.
+                                                                                  .
+*//* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   fractol.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/12/23 17:11:13 by mman              #+#    #+#             */
+/*   Updated: 2024/01/01 21:52:52 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +128,8 @@ void	ft_color_switch(t_mlxdata *mlxdata)
 		mlxdata->color_logic = 1;
 		ft_pntf("Switched to color mode 1\n");
 	}
+	printf("%f, %f, %f, %f --- %f\n", mlxdata->min.real, mlxdata->max.real, mlxdata->min.imag, mlxdata->max.imag, mlxdata->zoom);
+	// -0.845634, 3.154366, -0.345634, 2.654366 --- 0.001808
 }
 
 void ft_zoom_in(t_mlxdata *mlxdata, int x, int y, double zoom_factor)
@@ -139,7 +177,7 @@ int	key_hook(int keycode, t_mlxdata *mlxdata)
 		ft_pntf("REAL: %i \nIMAG: %i \nZOOM; %i", mlxdata->min.real, mlxdata->max.imag, mlxdata->zoom);
 	else if (keycode == 233 || keycode == 48 || keycode == 65438) // Key with code 233 (adjust as needed)
 		ft_color_switch(mlxdata);
-	draw_mandelbrot(mlxdata, 100);
+    mlxdata->draw_function(mlxdata, MAXIMUM_I);
 	mlx_put_image_to_window(mlxdata->mlx, mlxdata->win, mlxdata->img, 0, 0);
 	return (0);
 }
@@ -186,7 +224,9 @@ int mouse_hook(int button, int x, int y, t_mlxdata *mlxdata)
         ft_mouse_zoom_out(mlxdata, x, y, 1.1);
     else if (button == 5)
         ft_mouse_zoom_in(mlxdata, x, y, 1.0 / 1.1);
-    draw_mandelbrot(mlxdata, 100);
+	else if (button = 7)
+		mlxdata->zoom += 0.1;
+    mlxdata->draw_function(mlxdata, MAXIMUM_I);
     mlx_put_image_to_window(mlxdata->mlx, mlxdata->win, mlxdata->img, 0, 0);
     return (0);
 }
@@ -423,17 +463,85 @@ void	ft_mlx_init(char *set, t_mlxdata *mlxdata)
 	mlxdata->win = mlx_new_window(mlxdata->mlx, WIDTH, HEIGHT, set);
 	mlxdata->img = mlx_new_image(mlxdata->mlx, WIDTH, HEIGHT);
 	mlxdata->addr = mlx_get_data_addr(mlxdata->img, &(mlxdata->bits_per_pixel), &(mlxdata->line_length), &(mlxdata->endian));
+	if (ft_strncmp(set, "mandelbrot", ft_strlen(set)) == 0)
+		mlxdata->draw_function = draw_mandelbrot;
+	else if (ft_strncmp(set, "julia", ft_strlen(set)) == 0)
+		mlxdata->draw_function = ft_draw_julia;
 	ft_default_zoom(mlxdata);
 }
 
-int		main(void)
+void	ft_draw_julia(t_mlxdata *mlxdata, int max_iter)
+{
+	int		x;
+	int		y;
+	double	dx;
+	double	dy;
+
+	dx = (mlxdata->max.real - mlxdata->min.real) / WIDTH;
+	dy = (mlxdata->max.imag - mlxdata->min.imag) / HEIGHT;
+	y = -1;
+	while (++y < HEIGHT)
+	{
+		x = -1;
+		while (++x < WIDTH)
+			ft_process_julia_pixel(mlxdata, x, y, dx, dy, max_iter);
+	}
+}
+
+void	ft_process_julia_pixel(t_mlxdata *mlxdata, int x, int y, double dx, double dy, int max_iter)
+{
+	t_complex	c;
+	t_complex	z;
+	int			iter;
+	int			color;
+	int			pixel_index;
+
+	c.real = mlxdata->min.real + x * dx * mlxdata->zoom;
+	c.imag = mlxdata->min.imag + y * dy * mlxdata->zoom;
+	z.real = (double)x / WIDTH * 3.0 - 1.5; // Adjust these values as needed
+	z.imag = (double)y / HEIGHT * 3.0 - 1.5;
+
+	iter = ft_julia_iteration(c, z, max_iter);
+	color = calculate_color(iter, max_iter, mlxdata->color_logic, x, y);
+	pixel_index = (y * mlxdata->line_length) + (x * (mlxdata->bits_per_pixel / 8));
+	mlxdata->addr[pixel_index] = color >> 16;     // Red
+	mlxdata->addr[pixel_index + 1] = color >> 8;  // Green
+	mlxdata->addr[pixel_index + 2] = color;       // Blue
+}
+
+int	ft_julia_iteration(t_complex c, t_complex z, int max_iter)
+{
+	int			iter;
+	double		real_tmp;
+	double		imag_tmp;
+
+	iter = 0;
+	while (iter < max_iter)
+	{
+		real_tmp = z.real * z.real - z.imag * z.imag + c.real;
+		imag_tmp = 2 * z.real * z.imag + c.imag;
+		z.real = real_tmp;
+		z.imag = imag_tmp;
+		if (z.real * z.real + z.imag * z.imag > 4)
+			break;
+		iter++;
+	}
+	return (iter);
+}
+
+
+int main(int argc, char **argv)
 {
 	t_mlxdata mlxdata;
 
-	ft_mlx_init("Mandelbrot Set", &mlxdata);
-	// mlx_hook(mlxdata.win, 2, 1L << 0, handle_keypress, &mlxdata); //
+	if (argc != 2)
+	{
+		ft_pntf("Usage: ./fractol [mandelbrot/julia]");
+		return (1);
+	}
 
-	draw_mandelbrot(&mlxdata, 100);
+	ft_mlx_init(argv[1], &mlxdata);
+	mlxdata.draw_function(&mlxdata, MAXIMUM_I);
 	mlx_put_image_to_window(mlxdata.mlx, mlxdata.win, mlxdata.img, 0, 0);
 	setup_event_hooks(&mlxdata);
 

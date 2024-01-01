@@ -6,7 +6,7 @@
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/19 20:45:12 by mman              #+#    #+#             */
-/*   Updated: 2023/12/30 00:27:19 by mman             ###   ########.fr       */
+/*   Updated: 2024/01/01 22:09:28 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,13 @@
 
 # define WIDTH 1200
 # define HEIGHT 800
-#ifndef M_PI
-#define M_PI (3.14159265358979323846264338327950288419716939937510582097494459)
+# ifndef M_PI
+# define M_PI (3.141592653589793238462643383279502884197169399375105820974944)
 #endif
 
+#ifndef MAXIMUM_I
+#define MAXIMUM_I 100
+#endif
 
 typedef struct	s_center_axis
 {
@@ -54,7 +57,9 @@ typedef struct	s_mlxdata
 	t_centr		center;
 	t_complex	min;
 	t_complex	max;
+	void		(*draw_function)(struct s_mlxdata *, int); // Function pointer
 }				t_mlxdata;
+
 
 // Event handling functions
 int		key_hook(int keycode, t_mlxdata *mlxdata);
@@ -75,5 +80,13 @@ int		mandelbrot_iteration(t_complex c, int max_iter);
 int 	calculate_color(int iteration, int max_iter, int color_logic, int x, int y);
 void	draw_mandelbrot(t_mlxdata *mlxdata, int max_iter);
 int		handle_keypress(int keycode, t_mlxdata *mlxdata);
+
+
+// Julia
+// new
+void	ft_process_julia_pixel(t_mlxdata *mlxdata, int x, int y, double dx, double dy, int max_iter);
+int		ft_julia_iteration(t_complex c, t_complex z, int max_iter);
+void	ft_draw_julia(t_mlxdata *mlxdata, int max_iter);
+
 
 #endif
