@@ -6,7 +6,7 @@
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/23 17:11:13 by mman              #+#    #+#             */
-/*   Updated: 2024/01/01 23:04:23 by mman             ###   ########.fr       */
+/*   Updated: 2024/01/01 23:31:05 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,8 @@ void	ft_color_switch(t_mlxdata *mlxdata)
 	}
 	printf("%f, %f, %f, %f --- %f\n", mlxdata->min.real, mlxdata->max.real, mlxdata->min.imag, mlxdata->max.imag, mlxdata->zoom);
 	// -0.845634, 3.154366, -0.345634, 2.654366 --- 0.001808
+	// -0.842690, 3.157310, 0.190110, 3.190110 --- 0.000114
+	// mlxdata->min.real, mlxdata->max.real, mlxdata->min.imag, mlxdata->max.imag, mlxdata->zoom
 }
 
 void ft_zoom_in(t_mlxdata *mlxdata, int x, int y, double zoom_factor)
@@ -457,6 +459,18 @@ void	ft_default_zoom(t_mlxdata *mlxdata)
 	mlxdata->color_logic = 1;
 }
 
+static	ft_default_zoom_j(t_mlxdata *mlxdata)
+{
+    mlxdata->min.real = -0.845634;
+    mlxdata->max.real = 3.154366;
+    mlxdata->min.imag = -0.345634;
+    mlxdata->max.imag = 2.654366;
+    mlxdata->zoom = 0.001808;
+	mlxdata->center.real = WIDTH / 2;
+	mlxdata->center.imag = HEIGHT / 2;
+	mlxdata->color_logic = 1;
+}
+
 void	ft_mlx_init(char *set, t_mlxdata *mlxdata)
 {
 	mlxdata->mlx = mlx_init();
@@ -464,40 +478,46 @@ void	ft_mlx_init(char *set, t_mlxdata *mlxdata)
 	mlxdata->img = mlx_new_image(mlxdata->mlx, WIDTH, HEIGHT);
 	mlxdata->addr = mlx_get_data_addr(mlxdata->img, &(mlxdata->bits_per_pixel), &(mlxdata->line_length), &(mlxdata->endian));
 	if (ft_strncmp(set, "mandelbrot", ft_strlen(set)) == 0)
-		mlxdata->draw_function = draw_mandelbrot;
-	else if (ft_strncmp(set, "julia", ft_strlen(set)) == 0)
-		mlxdata->draw_function = ft_draw_julia;
-	ft_default_zoom(mlxdata);
-}
-
-void	ft_draw_julia(t_mlxdata *mlxdata, int max_iter)
-{
-	int		x;
-	int		y;
-	double	dx;
-	double	dy;
-
-	dx = (mlxdata->max.real - mlxdata->min.real) / WIDTH;
-	dy = (mlxdata->max.imag - mlxdata->min.imag) / HEIGHT;
-	y = -1;
-	while (++y < HEIGHT)
 	{
-		x = -1;
-		while (++x < WIDTH)
-			ft_process_julia_pixel(mlxdata, x, y, dx, dy, max_iter);
+		mlxdata->draw_function = draw_mandelbrot;
+		ft_default_zoom(mlxdata);
+	}
+	else if (ft_strncmp(set, "julia", ft_strlen(set)) == 0)
+	{
+		mlxdata->draw_function = ft_draw_julia;
+		ft_default_zoom_j(mlxdata);
 	}
 }
 
-void	ft_process_julia_pixel(t_mlxdata *mlxdata, int x, int y, double dx, double dy, int max_iter)
+void ft_draw_julia(t_mlxdata *mlxdata, int max_iter)
 {
-	t_complex	c;
-	t_complex	z;
-	int			iter;
-	int			color;
-	int			pixel_index;
+    int x;
+    int y;
+    double dx;
+    double dy;
 
-	c.real = mlxdata->min.real + x * dx * mlxdata->zoom;
-	c.imag = mlxdata->min.imag + y * dy * mlxdata->zoom;
+    dx = (mlxdata->max.real - mlxdata->min.real) / WIDTH;
+    dy = (mlxdata->max.imag - mlxdata->min.imag) / HEIGHT;
+    y = -1;
+    while (++y < HEIGHT)
+    {
+        x = -1;
+        while (++x < WIDTH)
+            ft_process_julia_pixel(mlxdata, x, y, dx, dy, max_iter);
+    }
+}
+
+void ft_process_julia_pixel(t_mlxdata *mlxdata, int x, int y, double dx, double dy, int max_iter)
+{
+    t_complex c;
+    t_complex z;
+    int iter;
+    int color;
+    int pixel_index;
+
+    // Adjust the calculation of c to take into account the zoom factor
+    c.real = mlxdata->min.real + x * dx * mlxdata->zoom;
+    c.imag = mlxdata->min.imag + y * dy * mlxdata->zoom;
 	z.real = (double)x / WIDTH * 3.0 - 1.5; // Adjust these values as needed
 	z.imag = (double)y / HEIGHT * 3.0 - 1.5;
 
