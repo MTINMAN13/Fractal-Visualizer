@@ -6,7 +6,7 @@
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/23 17:11:13 by mman              #+#    #+#             */
-/*   Updated: 2023/12/30 19:54:42 by mman             ###   ########.fr       */
+/*   Updated: 2024/01/01 19:12:22 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,15 +30,15 @@
 /*                   B O N U S                                                     .
 One more different fractal (more than a hundred different types of fractals are
 referenced online).
-• The zoom follows the actual mouse position.
-• In addition to the zoom: moving the view by pressing the arrows keys.
+• The zoom follows the actual mouse position. ✅
+• In addition to the zoom: moving the view by pressing the arrows keys. ✅
 • Make the color range shift.
                                                                                   .
 */
 
 
 /*                   T O D O                                                     .
-mouse 4 and 5 zoom in and out
+mouse 4 and 5 zoom in and out ✅
 Your program must offer the Julia set and the Mandelbrot set.
 You must be able to create different Julia sets by passing different parameters to
 the program.
@@ -98,16 +98,20 @@ void ft_zoom_in(t_mlxdata *mlxdata, int x, int y, double zoom_factor)
 {
 	mlxdata->zoom *= zoom_factor;
 	double move_step = 0.1738 * mlxdata->zoom; // Calculate the proportional movement step
-	ft_adjust_render(mlxdata, '+', 'r', move_step);
-	ft_adjust_render(mlxdata, '+', 'i', move_step);
+	mlxdata->min.real += move_step;
+	mlxdata->max.real += move_step;
+	mlxdata->min.imag += move_step;
+	mlxdata->max.imag += move_step;
 }
 
 void ft_zoom_out(t_mlxdata *mlxdata, int x, int y, double zoom_factor)
 {
 	mlxdata->zoom *= zoom_factor;
 	double move_step = 0.1738 * mlxdata->zoom; // Calculate the proportional movement step
-	ft_adjust_render(mlxdata, '-', 'r', move_step);
-	ft_adjust_render(mlxdata, '-', 'i', move_step);
+	mlxdata->min.real -= move_step;
+	mlxdata->max.real -= move_step;
+	mlxdata->min.imag -= move_step;
+	mlxdata->max.imag -= move_step;
 }
 
 
@@ -142,16 +146,49 @@ int	key_hook(int keycode, t_mlxdata *mlxdata)
 
 // ... (rest of the code remains unchanged)
 
-
-int	mouse_hook(int button, int x, int y, t_mlxdata *mlxdata)
+void	ft_mouse_zoom_in(t_mlxdata *mlxdata, int x, int y, double zoom_factor)
 {
-	printf("Mouse button %d clicked at (%d, %d)\n", button, x, y);
-	// Add your mouse event handling logic here
-	if (button == 4)
-		mlxdata->zoom /= 1.04;
-	draw_mandelbrot(mlxdata, 100);
-	mlx_put_image_to_window(mlxdata->mlx, mlxdata->win, mlxdata->img, 0, 0);
-	return (0);
+	double move_step;
+	double x_offset;
+	double y_offset;
+
+	mlxdata->zoom *= zoom_factor;
+	move_step = 0.1738 * mlxdata->zoom;
+	x_offset = (double)x / (WIDTH / 2);
+	y_offset = (double)y / (HEIGHT / 2);
+	mlxdata->min.real += move_step * x_offset;
+	mlxdata->max.real += move_step * x_offset;
+	mlxdata->min.imag += move_step * y_offset;
+	mlxdata->max.imag += move_step * y_offset;
+}
+
+void	ft_mouse_zoom_out(t_mlxdata *mlxdata, int x, int y, double zoom_factor)
+{
+	double	move_step;
+	double	x_offset;
+	double	y_offset;
+
+	mlxdata->zoom *= zoom_factor;
+	move_step = 0.1738 * mlxdata->zoom;
+	x_offset = (double)x / (WIDTH / 1.9);
+	y_offset = (double)y / (HEIGHT / 1.9);
+	mlxdata->min.real -= move_step * x_offset;
+	mlxdata->max.real -= move_step * x_offset;
+	mlxdata->min.imag -= move_step * y_offset;
+	mlxdata->max.imag -= move_step * y_offset;
+}
+
+int mouse_hook(int button, int x, int y, t_mlxdata *mlxdata)
+{
+    printf("Mouse button %d clicked at (%d, %d)\n", button, x, y);
+    // Add your mouse event handling logic here
+    if (button == 4)
+        ft_mouse_zoom_out(mlxdata, x, y, 1.1);
+    else if (button == 5)
+        ft_mouse_zoom_in(mlxdata, x, y, 1.0 / 1.1);
+    draw_mandelbrot(mlxdata, 100);
+    mlx_put_image_to_window(mlxdata->mlx, mlxdata->win, mlxdata->img, 0, 0);
+    return (0);
 }
 
 int		mandelbrot_iteration(t_complex c, int max_iter)
