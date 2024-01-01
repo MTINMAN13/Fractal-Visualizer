@@ -69,7 +69,7 @@ run:
 		make $(NAME)
 		@clear
 		@echo "$(CLR2)--------- clean program run ---------$(DEF_COLOR)"
-		./$(NAME)
+		./$(NAME) julia
 		@echo
 		@echo
 		@echo "$(CLR2)--------- clean program run ---------$(DEF_COLOR)"
