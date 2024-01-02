@@ -18,8 +18,9 @@ INCLUDE = include
 
 # Sources
 SRC_FILES = fractol \
-			fractol_hooks_aka_key_controls fractol_mandelbrot \
-			fractol_utilities
+			fractol_hooks_aka_key_controls fractol_hooks_keys fractol_hooks_mouse \
+			fractol_mandelbrot fractol_julia \
+			fractol_utilities fractol_default_zoom_values \
 
 SRC = $(addsuffix .c, $(SRC_FILES))
 OBJ = $(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(SRC_FILES)))

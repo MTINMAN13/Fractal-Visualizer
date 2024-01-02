@@ -6,7 +6,7 @@
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/23 17:11:13 by mman              #+#    #+#             */
-/*   Updated: 2024/01/01 23:31:05 by mman             ###   ########.fr       */
+/*   Updated: 2024/01/02 15:56:28 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ referenced online).
 • The zoom follows the actual mouse position. ✅
 • In addition to the zoom: moving the view by pressing the arrows keys. ✅
 • Make the color range shift.
-                                                                                  .
+                se                                                                  .
 *//* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
@@ -134,167 +134,7 @@ void	ft_color_switch(t_mlxdata *mlxdata)
 	// mlxdata->min.real, mlxdata->max.real, mlxdata->min.imag, mlxdata->max.imag, mlxdata->zoom
 }
 
-void ft_zoom_in(t_mlxdata *mlxdata, int x, int y, double zoom_factor)
-{
-	mlxdata->zoom *= zoom_factor;
-	double move_step = 0.1738 * mlxdata->zoom; // Calculate the proportional movement step
-	mlxdata->min.real += move_step;
-	mlxdata->max.real += move_step;
-	mlxdata->min.imag += move_step;
-	mlxdata->max.imag += move_step;
-}
-
-void ft_zoom_out(t_mlxdata *mlxdata, int x, int y, double zoom_factor)
-{
-	mlxdata->zoom *= zoom_factor;
-	double move_step = 0.1738 * mlxdata->zoom; // Calculate the proportional movement step
-	mlxdata->min.real -= move_step;
-	mlxdata->max.real -= move_step;
-	mlxdata->min.imag -= move_step;
-	mlxdata->max.imag -= move_step;
-}
-
-
-int	key_hook(int keycode, t_mlxdata *mlxdata)
-{
-	ft_pntf("Hello from key_hook * %i!", keycode);
-	double move_step = 0.1 * mlxdata->zoom; // Calculate the proportional movement step
-	if (keycode == 65307) // 65307 is the keycode for the ESC key
-		close_window(mlxdata);
-	else if (keycode == 505 || keycode == 59 || keycode == 65453) // ; (ZOOM OUT)
-        ft_zoom_out(mlxdata, WIDTH / 2, HEIGHT / 2, 1.1);
-	else if (keycode == 167 || keycode == 39 || keycode == 65451) // : (ZOOM IN)
-        ft_zoom_in(mlxdata, WIDTH / 2, HEIGHT / 2, 1.0 / 1.1);
-	else if (keycode == 61) // - (RESET)
-		ft_default_zoom(mlxdata);
-	else if (keycode == 119) // W (move up)
-		ft_adjust_render(mlxdata, '-', 'i', move_step);
-	else if (keycode == 97) // A (move left)
-		ft_adjust_render(mlxdata, '-', 'r', move_step);
-	else if (keycode == 115) // S (move down)
-		ft_adjust_render(mlxdata, '+', 'i', move_step);
-	else if (keycode == 100) // D (move right)
-		ft_adjust_render(mlxdata, '+', 'r', move_step);
-	else if (keycode == 0)
-		ft_pntf("REAL: %i \nIMAG: %i \nZOOM; %i", mlxdata->min.real, mlxdata->max.imag, mlxdata->zoom);
-	else if (keycode == 233 || keycode == 48 || keycode == 65438) // Key with code 233 (adjust as needed)
-		ft_color_switch(mlxdata);
-    mlxdata->draw_function(mlxdata, MAXIMUM_I);
-	mlx_put_image_to_window(mlxdata->mlx, mlxdata->win, mlxdata->img, 0, 0);
-	return (0);
-}
-
-// ... (rest of the code remains unchanged)
-
-void	ft_mouse_zoom_in(t_mlxdata *mlxdata, int x, int y, double zoom_factor)
-{
-	double move_step;
-	double x_offset;
-	double y_offset;
-
-	mlxdata->zoom *= zoom_factor;
-	move_step = 0.1738 * mlxdata->zoom;
-	x_offset = (double)x / (WIDTH / 2);
-	y_offset = (double)y / (HEIGHT / 2);
-	mlxdata->min.real += move_step * x_offset;
-	mlxdata->max.real += move_step * x_offset;
-	mlxdata->min.imag += move_step * y_offset;
-	mlxdata->max.imag += move_step * y_offset;
-}
-
-void	ft_mouse_zoom_out(t_mlxdata *mlxdata, int x, int y, double zoom_factor)
-{
-	double	move_step;
-	double	x_offset;
-	double	y_offset;
-
-	mlxdata->zoom *= zoom_factor;
-	move_step = 0.1738 * mlxdata->zoom;
-	x_offset = (double)x / (WIDTH / 1.9);
-	y_offset = (double)y / (HEIGHT / 1.9);
-	mlxdata->min.real -= move_step * x_offset;
-	mlxdata->max.real -= move_step * x_offset;
-	mlxdata->min.imag -= move_step * y_offset;
-	mlxdata->max.imag -= move_step * y_offset;
-}
-
-int mouse_hook(int button, int x, int y, t_mlxdata *mlxdata)
-{
-    printf("Mouse button %d clicked at (%d, %d)\n", button, x, y);
-    // Add your mouse event handling logic here
-    if (button == 4)
-        ft_mouse_zoom_out(mlxdata, x, y, 1.1);
-    else if (button == 5)
-        ft_mouse_zoom_in(mlxdata, x, y, 1.0 / 1.1);
-	else if (button = 7)
-		mlxdata->zoom += 0.1;
-    mlxdata->draw_function(mlxdata, MAXIMUM_I);
-    mlx_put_image_to_window(mlxdata->mlx, mlxdata->win, mlxdata->img, 0, 0);
-    return (0);
-}
-
-int		mandelbrot_iteration(t_complex c, int max_iter)
-{
-	t_complex	z;
-	int			iter;
-	double		real_tmp;
-	double		imag_tmp;
-
-	z.real = 0;
-	z.imag = 0;
-	iter = 0;
-	while (iter < max_iter)
-	{
-		real_tmp = z.real * z.real - z.imag * z.imag + c.real;
-		imag_tmp = 2 * z.real * z.imag + c.imag;
-		z.real = real_tmp;
-		z.imag = imag_tmp;
-		if (z.real * z.real + z.imag * z.imag > 4)
-			break;
-		iter++;
-	}
-	return (iter);
-}
-
-static void process_pixel(t_mlxdata *mlxdata, int x, int y, double dx, double dy, int max_iter)
-{
-    // Adjust the calculation of c to take into account the zoom factor
-    t_complex c;
-    int iter;
-    int color;
-    int pixel_index;
-
-    c.real = mlxdata->min.real + x * dx * mlxdata->zoom;
-    c.imag = mlxdata->min.imag + y * dy * mlxdata->zoom;
-
-    iter = mandelbrot_iteration(c, max_iter);
-    color = calculate_color(iter, max_iter, mlxdata->color_logic, x, y);
-    pixel_index = (y * mlxdata->line_length) + (x * (mlxdata->bits_per_pixel / 8));
-    mlxdata->addr[pixel_index] = color >> 16;     // Red
-    mlxdata->addr[pixel_index + 1] = color >> 8;  // Green
-    mlxdata->addr[pixel_index + 2] = color;       // Blue
-}
-
-
-void		draw_mandelbrot(t_mlxdata *mlxdata, int max_iter)
-{
-	int			x;
-	int			y;
-	double		dx;
-	double		dy;
-
-	dx = (mlxdata->max.real - mlxdata->min.real) / WIDTH;
-	dy = (mlxdata->max.imag - mlxdata->min.imag) / HEIGHT;
-	y = -1;
-	while (++y < HEIGHT)
-	{
-		x = -1;
-		while (++x < WIDTH)
-			process_pixel(mlxdata, x, y, dx, dy, max_iter);
-	}
-}
-
-
+// ... (rest of the code remains unchanged
 void calculate_smooth_color(double angle, int *r, int *g, int *b)
 {
     double hue = fmod(angle / (2 * M_PI), 1.0);
@@ -407,7 +247,7 @@ void calculate_smooth_color_two(double angle, int *r, int *g, int *b, int max_it
 
 
 
-int calculate_color(int iteration, int max_iter, int color_logic, int x, int y)
+int ft_calculate_color(int iteration, int max_iter, int color_logic, int x, int y)
 {
     double t = (double)iteration / max_iter;
 
@@ -445,32 +285,6 @@ int calculate_color(int iteration, int max_iter, int color_logic, int x, int y)
     return (r << 16) | (g << 8) | b;
 }
 
-
-
-void	ft_default_zoom(t_mlxdata *mlxdata)
-{
-	mlxdata->zoom = 0.666;
-	mlxdata->min.real = -2.0;
-	mlxdata->max.real = 2.0;
-	mlxdata->min.imag = -1.5;
-	mlxdata->max.imag = 1.5;
-	mlxdata->center.real = WIDTH / 2;
-	mlxdata->center.imag = HEIGHT / 2;
-	mlxdata->color_logic = 1;
-}
-
-static	ft_default_zoom_j(t_mlxdata *mlxdata)
-{
-    mlxdata->min.real = -0.845634;
-    mlxdata->max.real = 3.154366;
-    mlxdata->min.imag = -0.345634;
-    mlxdata->max.imag = 2.654366;
-    mlxdata->zoom = 0.001808;
-	mlxdata->center.real = WIDTH / 2;
-	mlxdata->center.imag = HEIGHT / 2;
-	mlxdata->color_logic = 1;
-}
-
 void	ft_mlx_init(char *set, t_mlxdata *mlxdata)
 {
 	mlxdata->mlx = mlx_init();
@@ -488,67 +302,6 @@ void	ft_mlx_init(char *set, t_mlxdata *mlxdata)
 		ft_default_zoom_j(mlxdata);
 	}
 }
-
-void ft_draw_julia(t_mlxdata *mlxdata, int max_iter)
-{
-    int x;
-    int y;
-    double dx;
-    double dy;
-
-    dx = (mlxdata->max.real - mlxdata->min.real) / WIDTH;
-    dy = (mlxdata->max.imag - mlxdata->min.imag) / HEIGHT;
-    y = -1;
-    while (++y < HEIGHT)
-    {
-        x = -1;
-        while (++x < WIDTH)
-            ft_process_julia_pixel(mlxdata, x, y, dx, dy, max_iter);
-    }
-}
-
-void ft_process_julia_pixel(t_mlxdata *mlxdata, int x, int y, double dx, double dy, int max_iter)
-{
-    t_complex c;
-    t_complex z;
-    int iter;
-    int color;
-    int pixel_index;
-
-    // Adjust the calculation of c to take into account the zoom factor
-    c.real = mlxdata->min.real + x * dx * mlxdata->zoom;
-    c.imag = mlxdata->min.imag + y * dy * mlxdata->zoom;
-	z.real = (double)x / WIDTH * 3.0 - 1.5; // Adjust these values as needed
-	z.imag = (double)y / HEIGHT * 3.0 - 1.5;
-
-	iter = ft_julia_iteration(c, z, max_iter);
-	color = calculate_color(iter, max_iter, mlxdata->color_logic, x, y);
-	pixel_index = (y * mlxdata->line_length) + (x * (mlxdata->bits_per_pixel / 8));
-	mlxdata->addr[pixel_index] = color >> 16;     // Red
-	mlxdata->addr[pixel_index + 1] = color >> 8;  // Green
-	mlxdata->addr[pixel_index + 2] = color;       // Blue
-}
-
-int	ft_julia_iteration(t_complex c, t_complex z, int max_iter)
-{
-	int			iter;
-	double		real_tmp;
-	double		imag_tmp;
-
-	iter = 0;
-	while (iter < max_iter)
-	{
-		real_tmp = z.real * z.real - z.imag * z.imag + c.real;
-		imag_tmp = 2 * z.real * z.imag + c.imag;
-		z.real = real_tmp;
-		z.imag = imag_tmp;
-		if (z.real * z.real + z.imag * z.imag > 4)
-			break;
-		iter++;
-	}
-	return (iter);
-}
-
 
 int main(int argc, char **argv)
 {
