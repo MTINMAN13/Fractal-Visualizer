@@ -6,7 +6,7 @@
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 14:46:12 by mman              #+#    #+#             */
-/*   Updated: 2024/01/02 19:42:41 by mman             ###   ########.fr       */
+/*   Updated: 2024/01/02 21:35:13 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static void	ft_draw_single_pixel(t_mlxdata *mlxdata, int x, int y, double dx, do
     z.real = mlxdata->min.real + (double)x * dx * mlxdata->zoom;
     z.imag = mlxdata->min.imag + (double)y * dy * mlxdata->zoom;
     iter = ft_julia_iteration(z, mlxdata->julia, max_iter);
-    color = ft_calculate_color(iter, max_iter, mlxdata->color_logic, x, y);
+    color = ft_calculate_color(iter, max_iter, mlxdata, x, y);
     pixel_index = (y * mlxdata->line_length) + (x * (mlxdata->bits_per_pixel / 8));
     mlxdata->addr[pixel_index] = color >> 16;     // Red
     mlxdata->addr[pixel_index + 1] = color >> 8;  // Green

@@ -18,7 +18,8 @@ INCLUDE = include
 
 # Sources
 SRC_FILES = fractol \
-			fractol_hooks_keys fractol_hooks_mouse fractol_hooks\
+			fractol_hooks_keys fractol_hooks_mouse fractol_hooks \
+			fractol_hooks_keysII \
 			fractol_julia fractol_mandelbrot fractol_mandeltri \
 			fractol_u_color fractol_utilities fractol_default_zoom_values \
 			fractol_u_shift_color
@@ -71,7 +72,7 @@ julia:
 		make $(NAME)
 		@clear
 		@echo "$(CLR2)--------- clean program run ---------$(DEF_COLOR)"
-		./$(NAME) julia -1.0 0.6
+		./$(NAME) julia -1.26 0.05
 		@echo
 		@echo
 		@echo "$(CLR2)--------- clean program run ---------$(DEF_COLOR)"

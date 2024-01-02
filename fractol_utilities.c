@@ -6,7 +6,7 @@
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 20:31:45 by mman              #+#    #+#             */
-/*   Updated: 2024/01/02 20:32:00 by mman             ###   ########.fr       */
+/*   Updated: 2024/01/02 23:15:25 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,4 +38,42 @@ void	ft_error_check(char *set)
 		&& ft_strncmp("mandelbrot", set, 10) != 0
 		&& ft_strncmp("mandeltri", set, 9) != 0)
 		ft_error("Usage: ./fractol [mandelbrot/julia x y/mandeltri]");
+}
+
+double	ft_atoidouble(const char *str)
+{
+	double	sign;
+	double	result;
+	double	decimal_place;
+	int		i;
+
+	i = 0;
+	sign = 1.0;
+	result = 0.0;
+	decimal_place = 1.0;
+	while (str[i] == '\f' || str[i] == '\t' || str[i] == ' '
+		|| str[i] == '\n' || str[i] == '\r' || str[i] == '\v')
+		i++;
+	if (str[i] == '-' || str[i] == '+')
+	{
+		if (str[i] == '-')
+			sign = -1.0;
+		i++;
+	}
+	while (str[i] >= '0' && str[i] <= '9')
+	{
+		result = result * 10.0 + (str[i] - '0');
+		i++;
+	}
+	if (str[i] == '.')
+	{
+		i++;
+		while (str[i] >= '0' && str[i] <= '9')
+		{
+			result = result * 10.0 + (str[i] - '0');
+			decimal_place *= 10.0;
+			i++;
+		}
+	}
+	return (sign * result / decimal_place);
 }

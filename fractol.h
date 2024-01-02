@@ -6,7 +6,7 @@
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/19 20:45:12 by mman              #+#    #+#             */
-/*   Updated: 2024/01/02 20:30:05 by mman             ###   ########.fr       */
+/*   Updated: 2024/01/03 00:03:03 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ typedef struct s_mlxdata
 	int			endian;
 	double		zoom;
 	int			color_logic;
-	int			color_offset;
+	int			c_offset;
 	t_centr		center;
 	t_complex	min;
 	t_complex	max;
@@ -77,6 +77,8 @@ void	ft_julia_error(void);
 void	ft_adjust_render(t_mlxdata *mlxdata, char dir_sign, char real_imag_sign, double move_step);
 
 // Utility functions
+// tools
+double	ft_atoidouble(const char *str);
 void	ft_default_zoom(t_mlxdata *mlxdata);
 void	ft_default_zoom_j(t_mlxdata *mlxdata, char **argv);
 void	ft_default_zoom_mtri(t_mlxdata *mlxdata);
@@ -90,7 +92,7 @@ void	ft_shift_right(t_mlxdata *mlxdata);
 // new
 int		ft_mandelbrot_iteration(t_complex c, int max_iter);
 int		ft_calculate_color(int iteration, int max_iter,
-			int color_logic, int x, int y);
+			t_mlxdata *mlxdata, int x, int y);
 void	ft_draw_mandelbrot(t_mlxdata *mlxdata, int max_iter);
 int		handle_keypress(int keycode, t_mlxdata *mlxdata);
 
@@ -100,6 +102,8 @@ int		handle_keypress(int keycode, t_mlxdata *mlxdata);
 void	ft_process_julia_pixel(t_mlxdata *mlxdata, int x, int y, double dx, double dy, int max_iter);
 int		ft_julia_iteration(t_complex c, t_complex z, int max_iter);
 void	ft_draw_julia(t_mlxdata *mlxdata, int max_iter);
+int		ft_process_julia_patterns(int keycode, t_mlxdata *mlxdata);
+
 
 // Tri
 //new

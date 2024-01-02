@@ -6,7 +6,7 @@
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/23 17:11:13 by mman              #+#    #+#             */
-/*   Updated: 2024/01/02 20:20:24 by mman             ###   ########.fr       */
+/*   Updated: 2024/01/03 00:19:54 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,36 +103,42 @@ int		ft_mandelbrot_iteration(t_complex c, int max_iter)
 	return (iter);
 }
 
-static void ft_process_pixel(t_mlxdata *mlxdata, int x, int y, double dx, double dy, int max_iter)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wclobbered"
+
+static void ft_process_pixel(register t_mlxdata *mlxdata, register int x, register int y, register long double dx, register long double dy, int max_iter)
 {
     t_complex c;
     int iter;
     int color;
     int pixel_index;
 
-    c.real = mlxdata->min.real + (double)x * dx * mlxdata->zoom;
-    c.imag = mlxdata->min.imag + (double)y * dy * mlxdata->zoom;
+    c.real = mlxdata->min.real + (long double)x * dx * mlxdata->zoom;
+    c.imag = mlxdata->min.imag + (long double)y * dy * mlxdata->zoom;
     iter = ft_mandelbrot_iteration(c, max_iter);
-    color = ft_calculate_color(iter, max_iter, mlxdata->color_logic, x, y);
+    color = ft_calculate_color(iter, max_iter, mlxdata, x, y);
     pixel_index = (y * mlxdata->line_length) + (x * (mlxdata->bits_per_pixel / 8));
     mlxdata->addr[pixel_index] = color >> 16;     // Red
     mlxdata->addr[pixel_index + 1] = color >> 8;  // Green
     mlxdata->addr[pixel_index + 2] = color;       // Blue
 }
-void		ft_draw_mandelbrot(t_mlxdata *mlxdata, int max_iter)
-{
-	int			x;
-	int			y;
-	double		dx;
-	double		dy;
 
-	dx = (mlxdata->max.real - mlxdata->min.real) / WIDTH;
-	dy = (mlxdata->max.imag - mlxdata->min.imag) / HEIGHT;
-	y = -1;
-	while (++y < HEIGHT)
-	{
-		x = -1;
-		while (++x < WIDTH)
-			ft_process_pixel(mlxdata, x, y, dx, dy, max_iter);
-	}
+#pragma GCC diagnostic pop
+
+void ft_draw_mandelbrot(t_mlxdata *mlxdata, int max_iter)
+{
+    int x;
+    int y;
+    long double dx;
+    long double dy;
+
+    dx = (mlxdata->max.real - mlxdata->min.real) / WIDTH;
+    dy = (mlxdata->max.imag - mlxdata->min.imag) / HEIGHT;
+    y = -1;
+    while (++y < HEIGHT)
+    {
+        x = -1;
+        while (++x < WIDTH)
+            ft_process_pixel(mlxdata, x, y, dx, dy, max_iter);
+    }
 }
