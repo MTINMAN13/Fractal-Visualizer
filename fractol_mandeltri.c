@@ -6,13 +6,14 @@
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 15:00:54 by mman              #+#    #+#             */
-/*   Updated: 2024/01/02 17:39:38 by mman             ###   ########.fr       */
+/*   Updated: 2024/01/02 20:21:02 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
 
 // z^2 + c^0.2
+// Tricorn (Mandelbar) Set
 
 int		ft_mandeltri_iteration(t_complex c, int max_iter)
 {
@@ -31,7 +32,7 @@ int		ft_mandeltri_iteration(t_complex c, int max_iter)
 		z.real = real_tmp;
 		z.imag = imag_tmp;
 		if (z.real * z.real + z.imag * z.imag > 4)
-			break;
+			break ;
 		iter++;
 	}
 	return (iter);

@@ -21,6 +21,7 @@ SRC_FILES = fractol \
 			fractol_hooks_keys fractol_hooks_mouse fractol_hooks\
 			fractol_julia fractol_mandelbrot fractol_mandeltri \
 			fractol_u_color fractol_utilities fractol_default_zoom_values \
+			fractol_u_shift_color
 
 SRC = $(addsuffix .c, $(SRC_FILES))
 OBJ = $(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(SRC_FILES)))
@@ -59,7 +60,7 @@ fclean: clean
 		@sleep 1
 		@clear
 
-re: fclean all $(NAME)
+re: clean all $(NAME)
 	@sleep 1
 
 norm:
@@ -71,6 +72,15 @@ julia:
 		@clear
 		@echo "$(CLR2)--------- clean program run ---------$(DEF_COLOR)"
 		./$(NAME) julia -1.0 0.6
+		@echo
+		@echo
+		@echo "$(CLR2)--------- clean program run ---------$(DEF_COLOR)"
+
+m:
+		make $(NAME)
+		@clear
+		@echo "$(CLR2)--------- clean program run ---------$(DEF_COLOR)"
+		./$(NAME) mandeltri
 		@echo
 		@echo
 		@echo "$(CLR2)--------- clean program run ---------$(DEF_COLOR)"

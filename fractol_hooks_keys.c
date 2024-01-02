@@ -6,7 +6,7 @@
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 15:51:19 by mman              #+#    #+#             */
-/*   Updated: 2024/01/02 19:24:24 by mman             ###   ########.fr       */
+/*   Updated: 2024/01/02 20:01:43 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	ft_zoom_out(t_mlxdata *mlxdata, int x, int y, double zoom_factor)
 	mlxdata->max.imag -= move_step * HEIGHT / 800.0 * 0.9;
 }
 
-static void	process_movement(int keycode, t_mlxdata *mlxdata, double move_step)
+static void	ft_process_movement(int keycode, t_mlxdata *mlxdata, double move_step)
 {
 	if (keycode == 119) // W (move up)
 		ft_adjust_render(mlxdata, '-', 'i', move_step);
@@ -78,7 +78,7 @@ static void	process_movement(int keycode, t_mlxdata *mlxdata, double move_step)
 		ft_adjust_render(mlxdata, '+', 'r', move_step);
 }
 
-static void	process_other_keys(int keycode, t_mlxdata *mlxdata)
+static void	ft_process_other_keys(int keycode, t_mlxdata *mlxdata)
 {
 	if (keycode == 65307) // 65307 is the keycode for the ESC key
 		close_window(mlxdata);
@@ -97,13 +97,22 @@ static void	process_other_keys(int keycode, t_mlxdata *mlxdata)
 	mlx_put_image_to_window(mlxdata->mlx, mlxdata->win, mlxdata->img, 0, 0);
 }
 
+void	ft_process_color_shift(int keycode, t_mlxdata *mlxdata)
+{
+	if (keycode == 113) // 65307 is the keycode for the ESC key
+		ft_shift_left(mlxdata);
+	else if (keycode == 101) // 65307 is the keycode for the ESC key
+		ft_shift_right(mlxdata);
+	ft_pntf("");
+}
+
 int key_hook(int keycode, t_mlxdata *mlxdata)
 {
     double move_step;
 
 	move_step = 0.1 * mlxdata->zoom; // Calculate the proportional movement step
-    process_movement(keycode, mlxdata, move_step);
-    process_other_keys(keycode, mlxdata);
-
+    ft_process_movement(keycode, mlxdata, move_step);
+    ft_process_other_keys(keycode, mlxdata);
+	ft_process_color_shift(keycode, mlxdata);
     return (0);
 }

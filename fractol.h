@@ -6,7 +6,7 @@
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/19 20:45:12 by mman              #+#    #+#             */
-/*   Updated: 2024/01/02 19:41:12 by mman             ###   ########.fr       */
+/*   Updated: 2024/01/02 20:30:05 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ typedef struct s_mlxdata
 	int			endian;
 	double		zoom;
 	int			color_logic;
+	int			color_offset;
 	t_centr		center;
 	t_complex	min;
 	t_complex	max;
@@ -61,24 +62,29 @@ typedef struct s_mlxdata
 	void		(*draw_function)(struct s_mlxdata *, int); // Function pointer
 }				t_mlxdata;
 
-
 // Event handling functions
 int		key_hook(int keycode, t_mlxdata *mlxdata);
 int		mouse_hook(int button, int x, int y, t_mlxdata *mlxdata);
 int		close_window(t_mlxdata *mlxdata);
 int		close_window_event(t_mlxdata *mlxdata);
 void	setup_event_hooks(t_mlxdata *mlxdata);
+// error
 void	ft_error(char *str);
+void	ft_error_check(char *set);
 void	ft_julia_error(void);
 
 // keymapping func.
 void	ft_adjust_render(t_mlxdata *mlxdata, char dir_sign, char real_imag_sign, double move_step);
 
-
 // Utility functions
 void	ft_default_zoom(t_mlxdata *mlxdata);
-void	ft_default_zoom_j(t_mlxdata *mlxdata);
+void	ft_default_zoom_j(t_mlxdata *mlxdata, char **argv);
+void	ft_default_zoom_mtri(t_mlxdata *mlxdata);
+// col
 void	ft_color_switch(t_mlxdata *mlxdata);
+void	ft_process_color_shift(int keycode, t_mlxdata *mlxdata);
+void	ft_shift_left(t_mlxdata *mlxdata);
+void	ft_shift_right(t_mlxdata *mlxdata);
 
 // Mandelbrot 
 // new
@@ -95,5 +101,7 @@ void	ft_process_julia_pixel(t_mlxdata *mlxdata, int x, int y, double dx, double 
 int		ft_julia_iteration(t_complex c, t_complex z, int max_iter);
 void	ft_draw_julia(t_mlxdata *mlxdata, int max_iter);
 
+// Tri
+//new
 
 #endif

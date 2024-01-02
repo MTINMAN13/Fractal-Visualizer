@@ -6,7 +6,7 @@
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/23 17:11:13 by mman              #+#    #+#             */
-/*   Updated: 2024/01/02 19:32:11 by mman             ###   ########.fr       */
+/*   Updated: 2024/01/02 20:22:10 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,10 +91,7 @@ displayed in a window.✅
 
 int	ft_mlx_init(char *set, t_mlxdata *mlxdata, char **argv, int argc)
 {
-	if (ft_strncmp("julia", set, 5) != 0
-		&& ft_strncmp("mandelbrot", set, 10) != 0
-		&& ft_strncmp("mandeltri", set, 9) != 0)
-		ft_error("Usage: ./fractol [mandelbrot/julia x y/mandeltri]");
+	ft_error_check(set);
 	mlxdata->mlx = mlx_init();
 	mlxdata->win = mlx_new_window(mlxdata->mlx, WIDTH, HEIGHT, set);
 	mlxdata->img = mlx_new_image(mlxdata->mlx, WIDTH, HEIGHT);
@@ -110,7 +107,14 @@ int	ft_mlx_init(char *set, t_mlxdata *mlxdata, char **argv, int argc)
 		if (argc <= 2)
 			ft_julia_error();
 		mlxdata->draw_function = ft_draw_julia;
-		ft_default_zoom_j(mlxdata);
+		ft_default_zoom_j(mlxdata, argv);
+	}
+	else if (ft_strncmp(set, "tricorn", ft_strlen(set)) == 0)
+	{
+		if (argc <= 2)
+			ft_julia_error();
+		mlxdata->draw_function = ft_draw_julia;
+		ft_default_zoom_j(mlxdata, argv);
 	}
 	return (0);
 }
