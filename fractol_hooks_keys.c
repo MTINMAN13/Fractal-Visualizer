@@ -6,7 +6,7 @@
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 15:51:19 by mman              #+#    #+#             */
-/*   Updated: 2024/01/02 19:24:24 by mman             ###   ########.fr       */
+/*   Updated: 2024/01/02 23:57:29 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	ft_zoom_out(t_mlxdata *mlxdata, int x, int y, double zoom_factor)
 	mlxdata->max.imag -= move_step * HEIGHT / 800.0 * 0.9;
 }
 
-static void	process_movement(int keycode, t_mlxdata *mlxdata, double move_step)
+static void	ft_process_movement(int keycode, t_mlxdata *mlxdata, double move_step)
 {
 	if (keycode == 119) // W (move up)
 		ft_adjust_render(mlxdata, '-', 'i', move_step);
@@ -78,7 +78,7 @@ static void	process_movement(int keycode, t_mlxdata *mlxdata, double move_step)
 		ft_adjust_render(mlxdata, '+', 'r', move_step);
 }
 
-static void	process_other_keys(int keycode, t_mlxdata *mlxdata)
+static void	ft_process_other_keys(int keycode, t_mlxdata *mlxdata)
 {
 	if (keycode == 65307) // 65307 is the keycode for the ESC key
 		close_window(mlxdata);
@@ -89,21 +89,34 @@ static void	process_other_keys(int keycode, t_mlxdata *mlxdata)
 	else if (keycode == 61) // - (RESET)
 		ft_default_zoom(mlxdata);
 	else if (keycode == 0)
+	{
 		ft_pntf("REAL: %i \nIMAG: %i \nZOOM; %i", mlxdata->min.real, mlxdata->max.imag, mlxdata->zoom);
+		printf("--JULIA--\nREAL: %f\nIMAG: %f\n", mlxdata->julia.real, mlxdata->julia.imag);
+	}
 	else if (keycode == 233 || keycode == 48 || keycode == 65438) // Key with code 233 (adjust as needed)
 		ft_color_switch(mlxdata);
 	ft_pntf("Hello from key_hook * %i!", keycode);
-	mlxdata->draw_function(mlxdata, MAXIMUM_I);
-	mlx_put_image_to_window(mlxdata->mlx, mlxdata->win, mlxdata->img, 0, 0);
 }
 
-int key_hook(int keycode, t_mlxdata *mlxdata)
+void	ft_process_color_shift(int keycode, t_mlxdata *mlxdata)
 {
-    double move_step;
+	if (keycode == 113) // 65307 is the keycode for the ESC key
+		ft_shift_left(mlxdata);
+	else if (keycode == 101) // 65307 is the keycode for the ESC key
+		ft_shift_right(mlxdata);
+	ft_pntf("");
+}
+
+int	key_hook(int keycode, t_mlxdata *mlxdata)
+{
+    double	move_step;
 
 	move_step = 0.1 * mlxdata->zoom; // Calculate the proportional movement step
-    process_movement(keycode, mlxdata, move_step);
-    process_other_keys(keycode, mlxdata);
-
+    ft_process_movement(keycode, mlxdata, move_step);
+    ft_process_other_keys(keycode, mlxdata);
+	ft_process_color_shift(keycode, mlxdata);
+	ft_process_julia_patterns(keycode, mlxdata);
+	mlxdata->draw_function(mlxdata, MAXIMUM_I);
+	mlx_put_image_to_window(mlxdata->mlx, mlxdata->win, mlxdata->img, 0, 0);
     return (0);
 }

@@ -6,62 +6,11 @@
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/23 17:11:13 by mman              #+#    #+#             */
-/*   Updated: 2024/01/02 19:32:11 by mman             ###   ########.fr       */
+/*   Updated: 2024/01/03 00:19:03 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
-
-// int	main(void)
-// {
-// 	t_vars	vars;
-
-// 	vars.mlx = mlx_init();
-// 	vars.win = mlx_new_window(vars.mlx, SIDE_LEN, SIDE_LEN, "Fractol");
-// 	if (vars.mlx == 0 || vars.win == NULL)
-// 		ft_error("exit code");
-// 	vars.img.img_ptr = mlx_new_image(vars.mlx, SIDE_LEN, SIDE_LEN);
-// 	vars.img.img_pixels_ptr = mlx_get_data_addr(vars.img.img_ptr, &vars.img.bits_per_pixel, &vars.img.line_len, &vars.img.endian);
-// 	ft_program(vars);
-// 	ft_cleanup_all(vars);
-// 	return (0);
-// }
-
-/*                   B O N U S                                                     .
-One more different fractal (more than a hundred different types of fractals are
-referenced online).
-• The zoom follows the actual mouse position. ✅
-• In addition to the zoom: moving the view by pressing the arrows keys. ✅
-• Make the color range shift.
-                se                                                                  .
-*//* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   fractol.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/23 17:11:13 by mman              #+#    #+#             */
-/*   Updated: 2024/01/01 21:52:52 by mman             ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#include "fractol.h"
-
-// int	main(void)
-// {
-// 	t_vars	vars;
-
-// 	vars.mlx = mlx_init();
-// 	vars.win = mlx_new_window(vars.mlx, SIDE_LEN, SIDE_LEN, "Fractol");
-// 	if (vars.mlx == 0 || vars.win == NULL)
-// 		ft_error("exit code");
-// 	vars.img.img_ptr = mlx_new_image(vars.mlx, SIDE_LEN, SIDE_LEN);
-// 	vars.img.img_pixels_ptr = mlx_get_data_addr(vars.img.img_ptr, &vars.img.bits_per_pixel, &vars.img.line_len, &vars.img.endian);
-// 	ft_program(vars);
-// 	ft_cleanup_all(vars);
-// 	return (0);
-// }
 
 /*                   B O N U S                                                     .
 One more different fractal (more than a hundred different types of fractals are
@@ -89,12 +38,11 @@ displayed in a window.✅
                                                                                   .
 */
 
+// wuki edge of seventeen
+
 int	ft_mlx_init(char *set, t_mlxdata *mlxdata, char **argv, int argc)
 {
-	if (ft_strncmp("julia", set, 5) != 0
-		&& ft_strncmp("mandelbrot", set, 10) != 0
-		&& ft_strncmp("mandeltri", set, 9) != 0)
-		ft_error("Usage: ./fractol [mandelbrot/julia x y/mandeltri]");
+	ft_error_check(set);
 	mlxdata->mlx = mlx_init();
 	mlxdata->win = mlx_new_window(mlxdata->mlx, WIDTH, HEIGHT, set);
 	mlxdata->img = mlx_new_image(mlxdata->mlx, WIDTH, HEIGHT);
@@ -110,7 +58,14 @@ int	ft_mlx_init(char *set, t_mlxdata *mlxdata, char **argv, int argc)
 		if (argc <= 2)
 			ft_julia_error();
 		mlxdata->draw_function = ft_draw_julia;
-		ft_default_zoom_j(mlxdata);
+		ft_default_zoom_j(mlxdata, argv);
+	}
+	else if (ft_strncmp(set, "tricorn", ft_strlen(set)) == 0)
+	{
+		if (argc <= 2)
+			ft_julia_error();
+		mlxdata->draw_function = ft_draw_julia;
+		ft_default_zoom_j(mlxdata, argv);
 	}
 	return (0);
 }

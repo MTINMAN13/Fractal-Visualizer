@@ -6,7 +6,7 @@
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 20:31:45 by mman              #+#    #+#             */
-/*   Updated: 2024/01/02 17:49:25 by mman             ###   ########.fr       */
+/*   Updated: 2024/01/03 00:26:15 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	ft_color_switch(t_mlxdata *mlxdata)
 		mlxdata->color_logic = 2;
 		ft_pntf("Switched to color mode 2\n");
 	}
-	else
+	else if (mlxdata->color_logic == 2)
 	{
 		mlxdata->color_logic = 1;
 		ft_pntf("Switched to color mode 1\n");
@@ -29,73 +29,6 @@ void	ft_color_switch(t_mlxdata *mlxdata)
 	// -0.842690, 3.157310, 0.190110, 3.190110 --- 0.000114
 	// mlxdata->min.real, mlxdata->max.real, mlxdata->min.imag, mlxdata->max.imag, mlxdata->zoom
 }
-
-// ... (rest of the code remains unchanged
-void calculate_smooth_color(double angle, int *r, int *g, int *b)
-{
-    double hue = fmod(angle / (2 * M_PI), 1.0);
-    double saturation = 1.0;
-    double lightness = 0.5;
-
-    double chroma = (1 - fabs(2 * lightness - 1)) * saturation;
-    double hue_ = 6 * hue;
-    double x = chroma * (1 - fabs(fmod(hue_, 2) - 1));
-
-    double r_, g_, b_;
-    if (hue_ >= 0 && hue_ < 1)
-    {
-        r_ = chroma;
-        g_ = x;
-        b_ = 0;
-    }
-    else if (hue_ >= 1 && hue_ < 2)
-    {
-        r_ = x;
-        g_ = chroma;
-        b_ = 0;
-    }
-    else if (hue_ >= 2 && hue_ < 3)
-    {
-        r_ = 0;
-        g_ = chroma;
-        b_ = x;
-    }
-    else if (hue_ >= 3 && hue_ < 4)
-    {
-        r_ = 0;
-        g_ = x;
-        b_ = chroma;
-    }
-    else if (hue_ >= 4 && hue_ < 5)
-    {
-        r_ = x;
-        g_ = 0;
-        b_ = chroma;
-    }
-    else
-    {
-        r_ = chroma;
-        g_ = 0;
-        b_ = x;
-    }
-
-    double m = lightness - chroma / 2;
-    *r = (int)((r_ + m) * 255);
-    *g = (int)((g_ + m) * 255);
-    *b = (int)((b_ + m) * 255);
-}
-
-void calculate_smooth_color_two(double angle, int *r, int *g, int *b, int max_iter)
-{
-    // Modified color logic with a smoother loop through the entire RGB spectrum
-    double t = angle / (4 * M_PI);
-
-    // Use a sinusoidal function for each color component
-    *r = (int)(sin(2 * M_PI * t) * 127.5 + 127.5);
-    *g = (int)(sin(2 * M_PI * (t + 1.0 / 3.0)) * 127.5 + 127.5);
-    *b = (int)(sin(2 * M_PI * (t + 2.0 / 3.0)) * 127.5 + 127.5);
-}
-
 
 // #include <math.h>
 
@@ -138,41 +71,83 @@ void calculate_smooth_color_two(double angle, int *r, int *g, int *b, int max_it
 
 
 
-int ft_calculate_color(int iteration, int max_iter, int color_logic, int x, int y)
+int ft_calculate_color(int iteration, int max_iter, t_mlxdata *mlxdata, int x, int y)
 {
-    double t = (double)iteration / max_iter;
+	double t = (double)iteration / max_iter;
+	double angle;
+	int r, g, b;
+	int offset;
+	int priority;
+	double t_squared;
+	double t_cubed;
+	double gradient;
+	double phase_shift;
+	int i;
+	int r_component, g_component, b_component;
 
-    if (iteration == max_iter)
-        return 0x000000; // Black for points inside the set
+	if (iteration == max_iter)
+		return 0x000000;
 
-    double angle = 2 * M_PI * t; // Convert t to radians for sine function
-    int r, g, b;
+	angle = 2 * M_PI * t;
+	r = g = b = 0;
 
-    if (x == WIDTH / 2 && y == HEIGHT / 2)
-    {
-        // For the very middle pixel, make it 30% lighter
-        r = g = b = (int)(255 * (0.7 + 0.3 * t));
-    }
-    else if (color_logic == 1)
-    {
-        // Your existing color logic 1
-        r = (int)(9 * (1 - t) * t * t * t * 255);
-        g = (int)(15 * (1 - t) * (1 - t) * t * t * 255);
-        b = (int)(8.5 * (1 - t) * (1 - t) * (1 - t) * t * 255);
-    }
-    // else if (color_logic == 2)
-    // {
-    //     // Smooth color transition for color logic 2
-    //     calculate_smooth_color(angle, &r, &g, &b);
-    // }
-	else if (color_logic == 2)
-        calculate_smooth_color_two(angle, &r, &g, &b, max_iter);
-    else
-    {
-        // Handle unexpected input (optional)
-        return 0x000000;
-    }
+	if (x == WIDTH / 2 && y == HEIGHT / 2)
+	{
+		r = g = b = (int)(255 * (0.7 + 0.3 * t));
+	}
+	else if (mlxdata->color_logic == 1)
+	{
+		offset = mlxdata->c_offset;
+		priority = 3 % 20;
+		t_squared = t * t;
+		t_cubed = t_squared * t;
+		gradient = sin(2 * M_PI * t);
+		phase_shift = M_PI / 2;
+		i = 0;
 
-    return (r << 16) | (g << 8) | b;
+		while (i < priority)
+		{
+			double temp = gradient;
+			gradient = cos(2 * M_PI * t + phase_shift);
+			phase_shift += M_PI / 2;
+			i++;
+		}
+
+		r = (int)((1 + gradient) * 0.5 * 255);
+		g = (int)((1 + sin(2 * M_PI * t + phase_shift)) * 0.5 * 255);
+		b = (int)((1 + cos(2 * M_PI * t + phase_shift)) * 0.5 * 255);
+	}
+	else if (mlxdata->color_logic == 2)
+	{
+		offset = mlxdata->c_offset;
+		priority = (offset % 3);
+		r_component = (int)(9 * (1 - t) * t * t * t * 255);
+		g_component = (int)(15 * (1 - t) * (1 - t) * t * t * 255);
+		b_component = (int)(8.5 * (1 - t) * (1 - t) * (1 - t) * t * 255);
+
+		if (priority == 0)
+		{
+			r = r_component;
+			g = g_component;
+			b = b_component;
+		}
+		else if (priority == 1)
+		{
+			r = g_component;
+			g = b_component;
+			b = r_component;
+		}
+		else
+		{
+			r = b_component;
+			g = r_component;
+			b = g_component;
+		}
+	}
+	else
+	{
+		return 0x000000;
+	}
+
+	return (r << 16) | (g << 8) | b;
 }
-
