@@ -6,7 +6,7 @@
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 14:46:12 by mman              #+#    #+#             */
-/*   Updated: 2024/01/02 15:37:56 by mman             ###   ########.fr       */
+/*   Updated: 2024/01/02 19:42:41 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,21 +40,18 @@ static t_complex ft_compute_julia_c(t_mlxdata *mlxdata, int x, double dx, int y,
     return c;
 }
 
-static void ft_draw_single_pixel(t_mlxdata *mlxdata, int x, int y, double dx, double dy, int max_iter)
+static void	ft_draw_single_pixel(t_mlxdata *mlxdata, int x, int y, double dx, double dy, int max_iter)
 {
-    t_complex fixed_c = {-1.0, 0.6}; // Julia constant
-    t_complex z;
-    int iter;
-    int color;
-    int pixel_index;
+    t_complex 	z;
+    int 		iter;
+    int 		color;
+    int 		pixel_index;
 
     z.real = mlxdata->min.real + (double)x * dx * mlxdata->zoom;
     z.imag = mlxdata->min.imag + (double)y * dy * mlxdata->zoom;
-
-    iter = ft_julia_iteration(z, fixed_c, max_iter);
+    iter = ft_julia_iteration(z, mlxdata->julia, max_iter);
     color = ft_calculate_color(iter, max_iter, mlxdata->color_logic, x, y);
     pixel_index = (y * mlxdata->line_length) + (x * (mlxdata->bits_per_pixel / 8));
-
     mlxdata->addr[pixel_index] = color >> 16;     // Red
     mlxdata->addr[pixel_index + 1] = color >> 8;  // Green
     mlxdata->addr[pixel_index + 2] = color;       // Blue
@@ -62,24 +59,24 @@ static void ft_draw_single_pixel(t_mlxdata *mlxdata, int x, int y, double dx, do
 
 void ft_draw_julia(t_mlxdata *mlxdata, int max_iter)
 {
-    int x;
-    int y;
-    double dx;
-    double dy;
+	int		x;
+	int		y;
+	double	dx;
+	double	dy;
 
-    dx = (mlxdata->max.real - mlxdata->min.real) / WIDTH;
-    dy = (mlxdata->max.imag - mlxdata->min.imag) / HEIGHT;
+	dx = (mlxdata->max.real - mlxdata->min.real) / WIDTH;
+	dy = (mlxdata->max.imag - mlxdata->min.imag) / HEIGHT;
 
-    y = -1;
-    while (++y < HEIGHT)
-    {
-        x = -1;
-        while (++x < WIDTH)
-        {
-            t_complex c = ft_compute_julia_c(mlxdata, x, dx, y, dy);
-            ft_draw_single_pixel(mlxdata, x, y, dx, dy, max_iter);
-        }
-    }
+	y = -1;
+	while (++y < HEIGHT)
+	{
+		x = -1;
+		while (++x < WIDTH)
+		{
+			t_complex c = ft_compute_julia_c(mlxdata, x, dx, y, dy);
+			ft_draw_single_pixel(mlxdata, x, y, dx, dy, max_iter);
+		}
+	}
 }
 
 

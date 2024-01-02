@@ -6,7 +6,7 @@
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 15:00:54 by mman              #+#    #+#             */
-/*   Updated: 2024/01/02 15:26:04 by mman             ###   ########.fr       */
+/*   Updated: 2024/01/02 17:39:38 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 // z^2 + c^0.2
 
-int		mandelbrot_iteration(t_complex c, int max_iter)
+int		ft_mandeltri_iteration(t_complex c, int max_iter)
 {
 	t_complex	z;
 	int			iter;

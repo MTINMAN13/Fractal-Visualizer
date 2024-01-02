@@ -18,9 +18,9 @@ INCLUDE = include
 
 # Sources
 SRC_FILES = fractol \
-			fractol_hooks_aka_key_controls fractol_hooks_keys fractol_hooks_mouse \
-			fractol_mandelbrot fractol_julia \
-			fractol_utilities fractol_default_zoom_values \
+			fractol_hooks_keys fractol_hooks_mouse fractol_hooks\
+			fractol_julia fractol_mandelbrot fractol_mandeltri \
+			fractol_u_color fractol_utilities fractol_default_zoom_values \
 
 SRC = $(addsuffix .c, $(SRC_FILES))
 OBJ = $(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(SRC_FILES)))
@@ -66,11 +66,20 @@ norm:
 		@clear
 		@norminette $(NAME).c $(NAME).h
 
+julia:
+		make $(NAME)
+		@clear
+		@echo "$(CLR2)--------- clean program run ---------$(DEF_COLOR)"
+		./$(NAME) julia -1.0 0.6
+		@echo
+		@echo
+		@echo "$(CLR2)--------- clean program run ---------$(DEF_COLOR)"
+
 run:
 		make $(NAME)
 		@clear
 		@echo "$(CLR2)--------- clean program run ---------$(DEF_COLOR)"
-		./$(NAME) julia
+		./$(NAME) mandelbrot
 		@echo
 		@echo
 		@echo "$(CLR2)--------- clean program run ---------$(DEF_COLOR)"

@@ -6,7 +6,7 @@
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 15:51:19 by mman              #+#    #+#             */
-/*   Updated: 2024/01/02 16:06:30 by mman             ###   ########.fr       */
+/*   Updated: 2024/01/02 17:25:36 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	ft_mouse_zoom_in(t_mlxdata *mlxdata, int x, int y, double zoom_factor)
 	mlxdata->min.real += move_step * x_offset * WIDTH / 800.0 * 1.2;
 	mlxdata->max.real += move_step * x_offset * WIDTH / 800.0 * 1.2;
 	mlxdata->min.imag += move_step * y_offset * 1.2;
-	mlxdata->max.imag += move_step * y_offset* 1.2;
+	mlxdata->max.imag += move_step * y_offset * 1.2;
 }
 
 void	ft_mouse_zoom_out(t_mlxdata *mlxdata, int x, int y, double zoom_factor)
@@ -44,20 +44,19 @@ void	ft_mouse_zoom_out(t_mlxdata *mlxdata, int x, int y, double zoom_factor)
 	mlxdata->max.imag -= move_step * y_offset * HEIGHT / 700.0;
 }
 
-int mouse_hook(int button, int x, int y, t_mlxdata *mlxdata)
+int	mouse_hook(int button, int x, int y, t_mlxdata *mlxdata)
 {
 	if (button == 1 || button == 2)
 		return (1);
-    printf("Mouse button %d clicked at (%d, %d)\n", button, x, y);
-    // Add your mouse event handling logic here
-    if (button == 4)
-        ft_mouse_zoom_out(mlxdata, x, y, 1.1);
-    else if (button == 5)
-        ft_mouse_zoom_in(mlxdata, x, y, 1.0 / 1.1);
-	else if (button = 7)
+	printf("Mouse button %d clicked at (%d, %d)\n", button, x, y);
+	if (button == 4)
+		ft_mouse_zoom_out(mlxdata, x, y, 1.1);
+	else if (button == 5)
+		ft_mouse_zoom_in(mlxdata, x, y, 1.0 / 1.1);
+	else if (button == 7)
 		mlxdata->zoom += 0.1;
-    mlxdata->draw_function(mlxdata, MAXIMUM_I);
-    mlx_put_image_to_window(mlxdata->mlx, mlxdata->win, mlxdata->img, 0, 0);
-    return (0);
+	mlxdata->draw_function(mlxdata, MAXIMUM_I);
+	mlx_put_image_to_window(mlxdata->mlx, mlxdata->win, mlxdata->img, 0, 0);
+	return (0);
 }
 

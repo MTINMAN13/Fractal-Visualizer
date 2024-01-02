@@ -6,7 +6,7 @@
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/23 17:11:13 by mman              #+#    #+#             */
-/*   Updated: 2024/01/02 15:31:13 by mman             ###   ########.fr       */
+/*   Updated: 2024/01/02 19:32:20 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////
 
-int		mandelbrot_iteration(t_complex c, int max_iter)
+int		ft_mandelbrot_iteration(t_complex c, int max_iter)
 {
 	t_complex	z;
 	int			iter;
@@ -103,7 +103,7 @@ int		mandelbrot_iteration(t_complex c, int max_iter)
 	return (iter);
 }
 
-static void process_pixel(t_mlxdata *mlxdata, int x, int y, double dx, double dy, int max_iter)
+static void ft_process_pixel(t_mlxdata *mlxdata, int x, int y, double dx, double dy, int max_iter)
 {
     t_complex c;
     int iter;
@@ -112,14 +112,14 @@ static void process_pixel(t_mlxdata *mlxdata, int x, int y, double dx, double dy
 
     c.real = mlxdata->min.real + (double)x * dx * mlxdata->zoom;
     c.imag = mlxdata->min.imag + (double)y * dy * mlxdata->zoom;
-    iter = mandelbrot_iteration(c, max_iter);
+    iter = ft_mandelbrot_iteration(c, max_iter);
     color = ft_calculate_color(iter, max_iter, mlxdata->color_logic, x, y);
     pixel_index = (y * mlxdata->line_length) + (x * (mlxdata->bits_per_pixel / 8));
     mlxdata->addr[pixel_index] = color >> 16;     // Red
     mlxdata->addr[pixel_index + 1] = color >> 8;  // Green
     mlxdata->addr[pixel_index + 2] = color;       // Blue
 }
-void		draw_mandelbrot(t_mlxdata *mlxdata, int max_iter)
+void		ft_draw_mandelbrot(t_mlxdata *mlxdata, int max_iter)
 {
 	int			x;
 	int			y;
@@ -133,6 +133,6 @@ void		draw_mandelbrot(t_mlxdata *mlxdata, int max_iter)
 	{
 		x = -1;
 		while (++x < WIDTH)
-			process_pixel(mlxdata, x, y, dx, dy, max_iter);
+			ft_process_pixel(mlxdata, x, y, dx, dy, max_iter);
 	}
 }

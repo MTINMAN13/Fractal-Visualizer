@@ -6,7 +6,7 @@
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/19 20:45:12 by mman              #+#    #+#             */
-/*   Updated: 2024/01/02 15:45:48 by mman             ###   ########.fr       */
+/*   Updated: 2024/01/02 19:41:12 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,26 +24,26 @@
 # define WIDTH 1200
 # define HEIGHT 800
 # ifndef M_PI
-# define M_PI (3.141592653589793238462643383279502884197169399375105820974944)
-#endif
+#  define M_PI 3.141592653589793238462643383279502884197169399375105820974944
+# endif
 
-#ifndef MAXIMUM_I
-#define MAXIMUM_I 100
-#endif
+# ifndef MAXIMUM_I
+#  define MAXIMUM_I 100
+# endif
 
-typedef struct	s_center_axis
+typedef struct s_center_axis
 {
-	double real;
-	double imag;
+	double	real;
+	double	imag;
 }				t_centr;
 
-typedef struct	s_complex
+typedef struct s_complex
 {
 	double		real;
 	double		imag;
 }				t_complex;
 
-typedef struct	s_mlxdata
+typedef struct s_mlxdata
 {
 	void		*mlx;
 	void		*win;
@@ -57,6 +57,7 @@ typedef struct	s_mlxdata
 	t_centr		center;
 	t_complex	min;
 	t_complex	max;
+	t_complex	julia;
 	void		(*draw_function)(struct s_mlxdata *, int); // Function pointer
 }				t_mlxdata;
 
@@ -68,18 +69,23 @@ int		close_window(t_mlxdata *mlxdata);
 int		close_window_event(t_mlxdata *mlxdata);
 void	setup_event_hooks(t_mlxdata *mlxdata);
 void	ft_error(char *str);
+void	ft_julia_error(void);
+
+// keymapping func.
+void	ft_adjust_render(t_mlxdata *mlxdata, char dir_sign, char real_imag_sign, double move_step);
+
 
 // Utility functions
 void	ft_default_zoom(t_mlxdata *mlxdata);
-void 	ft_adjust_zoom(t_mlxdata *mlxdata, int x, int y, double zoom_factor);
 void	ft_default_zoom_j(t_mlxdata *mlxdata);
-
+void	ft_color_switch(t_mlxdata *mlxdata);
 
 // Mandelbrot 
 // new
-int		mandelbrot_iteration(t_complex c, int max_iter);
-int 	ft_calculate_color(int iteration, int max_iter, int color_logic, int x, int y);
-void	draw_mandelbrot(t_mlxdata *mlxdata, int max_iter);
+int		ft_mandelbrot_iteration(t_complex c, int max_iter);
+int		ft_calculate_color(int iteration, int max_iter,
+			int color_logic, int x, int y);
+void	ft_draw_mandelbrot(t_mlxdata *mlxdata, int max_iter);
 int		handle_keypress(int keycode, t_mlxdata *mlxdata);
 
 
