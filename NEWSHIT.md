@@ -1,3 +1,6 @@
+TODO -- Tricorn (Mandelbar) Set:
+TODO -- z^2 + c^0.2
+
 perror
 strerror
 
