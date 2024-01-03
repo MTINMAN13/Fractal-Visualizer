@@ -6,7 +6,7 @@
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 14:46:12 by mman              #+#    #+#             */
-/*   Updated: 2024/01/02 21:35:13 by mman             ###   ########.fr       */
+/*   Updated: 2024/01/03 02:21:36 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,22 +40,26 @@ static t_complex ft_compute_julia_c(t_mlxdata *mlxdata, int x, double dx, int y,
     return c;
 }
 
-static void	ft_draw_single_pixel(t_mlxdata *mlxdata, int x, int y, double dx, double dy, int max_iter)
+static void ft_draw_single_pixel(t_mlxdata *mlxdata, int x, int y, double dx, double dy, int max_iter)
 {
-    t_complex 	z;
-    int 		iter;
-    int 		color;
-    int 		pixel_index;
+    t_complex   z;
+    int         iter;
+    int         color;
+    int         pixel_index;
+    int         shift_amount = mlxdata->c_offset % 3;
 
     z.real = mlxdata->min.real + (double)x * dx * mlxdata->zoom;
     z.imag = mlxdata->min.imag + (double)y * dy * mlxdata->zoom;
     iter = ft_julia_iteration(z, mlxdata->julia, max_iter);
     color = ft_calculate_color(iter, max_iter, mlxdata, x, y);
-    pixel_index = (y * mlxdata->line_length) + (x * (mlxdata->bits_per_pixel / 8));
+
+    pixel_index = (y * mlxdata->line_length) + (x * (mlxdata->bits_per_pixel / 8)) + shift_amount;
+
     mlxdata->addr[pixel_index] = color >> 16;     // Red
     mlxdata->addr[pixel_index + 1] = color >> 8;  // Green
     mlxdata->addr[pixel_index + 2] = color;       // Blue
 }
+
 
 void ft_draw_julia(t_mlxdata *mlxdata, int max_iter)
 {

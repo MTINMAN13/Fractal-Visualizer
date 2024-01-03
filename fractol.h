@@ -6,7 +6,7 @@
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/19 20:45:12 by mman              #+#    #+#             */
-/*   Updated: 2024/01/03 00:03:03 by mman             ###   ########.fr       */
+/*   Updated: 2024/01/03 02:39:20 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void	ft_adjust_render(t_mlxdata *mlxdata, char dir_sign, char real_imag_sign, do
 // tools
 double	ft_atoidouble(const char *str);
 void	ft_default_zoom(t_mlxdata *mlxdata);
-void	ft_default_zoom_j(t_mlxdata *mlxdata, char **argv);
+void	ft_default_zoom_j(t_mlxdata *mlxdata, double real, double imag);
 void	ft_default_zoom_mtri(t_mlxdata *mlxdata);
 // col
 void	ft_color_switch(t_mlxdata *mlxdata);
@@ -107,5 +107,8 @@ int		ft_process_julia_patterns(int keycode, t_mlxdata *mlxdata);
 
 // Tri
 //new
+void	ft_draw_mandelbar(t_mlxdata *mlxdata, int max_iter);
+void 	ft_draw_burning_ship(t_mlxdata *mlxdata, int max_iter);
+
 
 #endif

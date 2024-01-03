@@ -1,21 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fractol_mandeltri.c                                :+:      :+:    :+:   */
+/*   fractol_ship.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/02 15:00:54 by mman              #+#    #+#             */
-/*   Updated: 2024/01/03 02:36:19 by mman             ###   ########.fr       */
+/*   Created: 2024/01/03 02:38:42 by mman              #+#    #+#             */
+/*   Updated: 2024/01/03 02:38:57 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
-#include <math.h>
 
 // z^2 + c^0.2
-// Tricorn (Mandelbar) Set
-static int ft_tricorn_iteration(t_complex c, int max_iter)
+// Burning Ship Fractal
+static int ft_burning_ship_iteration(t_complex c, int max_iter)
 {
     t_complex z;
     int iter;
@@ -28,10 +27,10 @@ static int ft_tricorn_iteration(t_complex c, int max_iter)
     while (iter < max_iter)
     {
         real_tmp = z.real * z.real - z.imag * z.imag + c.real;
-        imag_tmp = -4 * z.real * z.imag + c.imag; // Change the sign here for tricorn
+        imag_tmp = fabsl(2 * z.real * z.imag) + c.imag; // Adjust the formula for Burning Ship
         z.real = real_tmp;
         z.imag = imag_tmp;
-        if (sqrt(z.real * z.real + z.imag * z.imag) > 2) // Calculate magnitude manually
+        if (sqrtl(z.real * z.real + z.imag * z.imag) > 2) // Calculate magnitude manually
             break;
         iter++;
     }
@@ -47,7 +46,7 @@ static void ft_process_pixel(register t_mlxdata *mlxdata, register int x, regist
 
     c.real = mlxdata->min.real + (long double)x * dx * mlxdata->zoom;
     c.imag = mlxdata->min.imag + (long double)y * dy * mlxdata->zoom;
-    iter = ft_tricorn_iteration(c, max_iter); // Use tricorn iteration function
+    iter = ft_burning_ship_iteration(c, max_iter); // Use burning_ship_iteration function
     color = ft_calculate_color(iter, max_iter, mlxdata, x, y);
     pixel_index = (y * mlxdata->line_length) + (x * (mlxdata->bits_per_pixel / 8));
     mlxdata->addr[pixel_index] = color >> 16;     // Red
@@ -55,7 +54,7 @@ static void ft_process_pixel(register t_mlxdata *mlxdata, register int x, regist
     mlxdata->addr[pixel_index + 2] = color;       // Blue
 }
 
-void ft_draw_mandelbar(t_mlxdata *mlxdata, int max_iter)
+void ft_draw_burning_ship(t_mlxdata *mlxdata, int max_iter)
 {
     int x;
     int y;
