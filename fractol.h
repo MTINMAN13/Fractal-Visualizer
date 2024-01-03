@@ -6,7 +6,7 @@
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/19 20:45:12 by mman              #+#    #+#             */
-/*   Updated: 2024/01/03 15:40:42 by mman             ###   ########.fr       */
+/*   Updated: 2024/01/03 18:21:42 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 # endif
 
 # ifndef MAXIMUM_I
-#  define MAXIMUM_I 1000
+#  define MAXIMUM_I 100
 # endif
 
 typedef struct s_center_axis
@@ -63,10 +63,10 @@ typedef struct s_mlxdata
 }				t_mlxdata;
 
 // Event handling functions
-int		key_hook(int keycode, t_mlxdata *mlxdata);
-int		mouse_hook(int button, int x, int y, t_mlxdata *mlxdata);
+int		ft_key_hook(int keycode, t_mlxdata *mlxdata);
+int		ft_mouse_hook(int button, int x, int y, t_mlxdata *mlxdata);
 int		close_window(t_mlxdata *mlxdata);
-int		close_window_event(t_mlxdata *mlxdata);
+int		ft_close_window_event(t_mlxdata *mlxdata);
 void	setup_event_hooks(t_mlxdata *mlxdata);
 // error
 void	ft_error(char *str);
@@ -75,10 +75,14 @@ void	ft_julia_error(void);
 
 // keymapping func.
 void	ft_adjust_render(t_mlxdata *mlxdata, char dir_sign, char real_imag_sign, double move_step);
+void	ft_zoom_in(t_mlxdata *mlxdata, int x, int y, double zoom_factor);
+void	ft_zoom_out(t_mlxdata *mlxdata, int x, int y, double zoom_factor);
+void	ft_process_movement(int keycode, t_mlxdata *mlxdata, double move_step);
+void	ft_process_other_keys(int keycode, t_mlxdata *mlxdata);
+
 
 // Utility functions
 // tools
-double	ft_atoidouble(const char *str);
 void	ft_default_zoom(t_mlxdata *mlxdata);
 void	ft_default_zoom_j(t_mlxdata *mlxdata, double real, double imag);
 void	ft_default_zoom_mtri(t_mlxdata *mlxdata);
@@ -87,6 +91,12 @@ void	ft_color_switch(t_mlxdata *mlxdata);
 void	ft_process_color_shift(int keycode, t_mlxdata *mlxdata);
 void	ft_shift_left(t_mlxdata *mlxdata);
 void	ft_shift_right(t_mlxdata *mlxdata);
+
+// utils - RUNTIME
+void	ft_cleanup_all(t_mlxdata *mlxdata);
+void	ft_switch(char *set, t_mlxdata *mlxdata, char **argv, int argc);
+int		ft_mlx_init(char *set, t_mlxdata *mlxdata, char **argv, int argc);
+
 
 // Mandelbrot 
 // new

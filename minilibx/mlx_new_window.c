@@ -51,8 +51,8 @@ void	*mlx_new_window(t_xvar *xvar,int size_x,int size_y,char *title)
 	new_win->next = xvar->win_list;
 	xvar->win_list = new_win;
 	/*
-	new_win->mouse_hook = mlx_int_do_nothing;
-	new_win->key_hook = mlx_int_do_nothing;
+	new_win->ft_mouse_hook = mlx_int_do_nothing;
+	new_win->ft_key_hook = mlx_int_do_nothing;
 	new_win->expose_hook = mlx_int_do_nothing;
 	*/
 	bzero(&(new_win->hooks), sizeof(new_win->hooks));

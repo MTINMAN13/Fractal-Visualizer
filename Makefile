@@ -21,8 +21,9 @@ SRC_FILES = fractol \
 			fractol_hooks_keys fractol_hooks_mouse fractol_hooks \
 			fractol_hooks_keysII \
 			fractol_julia fractol_mandelbrot fractol_mandeltri fractol_ship \
-			fractol_u_color fractol_utilities fractol_default_zoom_values \
-			fractol_u_shift_color
+			\
+			fractol_u_shift_color fractol_u_color fractol_default_zoom_values \
+			fractol_utilities_errors fractol_utilities_runtime
 
 SRC = $(addsuffix .c, $(SRC_FILES))
 OBJ = $(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(SRC_FILES)))
@@ -41,6 +42,8 @@ $(NAME): libft $(OBJ)
 	# @clear 
 	@echo "$(CLR2)rdy$(DEF_COLOR)"
 
+minlibx: 
+		@ make -C minilibx/
 
 libft:
 		@ make -C libft/
@@ -96,7 +99,7 @@ run:
 		@echo "$(CLR2)--------- clean program run ---------$(DEF_COLOR)"
 
 valgrind:
-		valgrind --leak-check=full --show-leak-kinds=all ./$(NAME)
+		valgrind --leak-check=full --show-leak-kinds=all ./$(NAME) mandelbrot
 
 
 .PHONY: all libft clean fclean re norm $(NAME) run

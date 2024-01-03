@@ -6,7 +6,7 @@
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 15:51:19 by mman              #+#    #+#             */
-/*   Updated: 2024/01/02 17:25:36 by mman             ###   ########.fr       */
+/*   Updated: 2024/01/03 18:21:42 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,17 +44,14 @@ void	ft_mouse_zoom_out(t_mlxdata *mlxdata, int x, int y, double zoom_factor)
 	mlxdata->max.imag -= move_step * y_offset * HEIGHT / 700.0;
 }
 
-int	mouse_hook(int button, int x, int y, t_mlxdata *mlxdata)
+int	ft_mouse_hook(int button, int x, int y, t_mlxdata *mlxdata)
 {
 	if (button == 1 || button == 2)
 		return (1);
-	printf("Mouse button %d clicked at (%d, %d)\n", button, x, y);
 	if (button == 4)
 		ft_mouse_zoom_out(mlxdata, x, y, 1.1);
 	else if (button == 5)
 		ft_mouse_zoom_in(mlxdata, x, y, 1.0 / 1.1);
-	else if (button == 7)
-		mlxdata->zoom += 0.1;
 	mlxdata->draw_function(mlxdata, MAXIMUM_I);
 	mlx_put_image_to_window(mlxdata->mlx, mlxdata->win, mlxdata->img, 0, 0);
 	return (0);

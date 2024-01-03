@@ -6,7 +6,7 @@
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 15:00:54 by mman              #+#    #+#             */
-/*   Updated: 2024/01/03 15:55:49 by mman             ###   ########.fr       */
+/*   Updated: 2024/01/03 18:24:29 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,12 @@ static void ft_process_pixel(register t_mlxdata *mlxdata, register int x, regist
 	mlxdata->addr[pixel_index + 2] = color;
 }
 
-void ft_draw_mandelbar(t_mlxdata *mlxdata, int max_iter)
+void	ft_draw_mandelbar(t_mlxdata *mlxdata, int max_iter)
 {
-	int x;
-	int y;
-	long double dx;
-	long double dy;
+	int			x;
+	int			y;
+	long double	dx;
+	long double	dy;
 
 	dx = (mlxdata->max.real - mlxdata->min.real) / WIDTH;
 	dy = (mlxdata->max.imag - mlxdata->min.imag) / HEIGHT;
