@@ -6,7 +6,7 @@
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 23:28:02 by mman              #+#    #+#             */
-/*   Updated: 2024/01/03 00:36:28 by mman             ###   ########.fr       */
+/*   Updated: 2024/01/03 15:50:00 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,21 +22,21 @@ int	ft_process_julia_patterns(int keycode, t_mlxdata *mlxdata)
 {
 	if (keycode == 43)
 		ft_assign_julia(mlxdata, 0.285, 0.01);
-	else if (keycode == 492) // 2
+	else if (keycode == 492)
 		ft_assign_julia(mlxdata, -0.3978, 0.62);
-	else if (keycode == 441) // 3
+	else if (keycode == 441)
 		ft_assign_julia(mlxdata, -1.26, 0.05);
-	else if (keycode == 488) // 4
+	else if (keycode == 488)
 		ft_assign_julia(mlxdata, -0.77803, 0.134);
-	else if (keycode == 504) // 5
+	else if (keycode == 504)
 		ft_assign_julia(mlxdata, -0.654760, -0.688200);
-	else if (keycode == 105) // imake 
+	else if (keycode == 105)
 		mlxdata->julia.imag+= 0.001;
-	else if (keycode == 107) // k
+	else if (keycode == 107)
 		mlxdata->julia.imag += -0.001;
-	else if (keycode == 108) // l
+	else if (keycode == 108)
 		mlxdata->julia.real += 0.001;
-	else if (keycode == 106) // j
+	else if (keycode == 106)
 		mlxdata->julia.real += -0.001;
 }
 

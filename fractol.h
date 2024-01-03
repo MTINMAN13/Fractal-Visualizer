@@ -6,7 +6,7 @@
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/19 20:45:12 by mman              #+#    #+#             */
-/*   Updated: 2024/01/03 02:39:20 by mman             ###   ########.fr       */
+/*   Updated: 2024/01/03 15:40:42 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 # endif
 
 # ifndef MAXIMUM_I
-#  define MAXIMUM_I 100
+#  define MAXIMUM_I 1000
 # endif
 
 typedef struct s_center_axis

@@ -6,12 +6,19 @@
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 20:02:31 by mman              #+#    #+#             */
-/*   Updated: 2024/01/03 01:09:49 by mman             ###   ########.fr       */
+/*   Updated: 2024/01/03 15:42:47 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
 
+void	ft_process_color_shift(int keycode, t_mlxdata *mlxdata)
+{
+	if (keycode == 113)
+		ft_shift_left(mlxdata);
+	else if (keycode == 101)
+		ft_shift_right(mlxdata);
+}
 
 void	ft_color_switch(t_mlxdata *mlxdata)
 {

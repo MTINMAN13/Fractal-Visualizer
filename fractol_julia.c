@@ -6,7 +6,7 @@
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 14:46:12 by mman              #+#    #+#             */
-/*   Updated: 2024/01/03 02:21:36 by mman             ###   ########.fr       */
+/*   Updated: 2024/01/03 15:52:29 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int		ft_julia_iteration(t_complex z, t_complex c, int max_iter)
 		z.real = real_tmp;
 		z.imag = imag_tmp;
 		if (z.real * z.real + z.imag * z.imag > 4)
-			break;
+			break ;
 		iter++;
 	}
 	return (iter);
@@ -34,10 +34,11 @@ int		ft_julia_iteration(t_complex z, t_complex c, int max_iter)
 
 static t_complex ft_compute_julia_c(t_mlxdata *mlxdata, int x, double dx, int y, double dy)
 {
-    t_complex c;
+    t_complex	c;
+
     c.real = mlxdata->min.real + (double)x * dx * mlxdata->zoom;
     c.imag = mlxdata->min.imag + (double)y * dy * mlxdata->zoom;
-    return c;
+    return (c);
 }
 
 static void ft_draw_single_pixel(t_mlxdata *mlxdata, int x, int y, double dx, double dy, int max_iter)
@@ -60,13 +61,13 @@ static void ft_draw_single_pixel(t_mlxdata *mlxdata, int x, int y, double dx, do
     mlxdata->addr[pixel_index + 2] = color;       // Blue
 }
 
-
 void ft_draw_julia(t_mlxdata *mlxdata, int max_iter)
 {
-	int		x;
-	int		y;
-	double	dx;
-	double	dy;
+	int			x;
+	int			y;
+	double		dx;
+	double		dy;
+	t_complex	c;
 
 	dx = (mlxdata->max.real - mlxdata->min.real) / WIDTH;
 	dy = (mlxdata->max.imag - mlxdata->min.imag) / HEIGHT;
@@ -77,7 +78,7 @@ void ft_draw_julia(t_mlxdata *mlxdata, int max_iter)
 		x = -1;
 		while (++x < WIDTH)
 		{
-			t_complex c = ft_compute_julia_c(mlxdata, x, dx, y, dy);
+			c = ft_compute_julia_c(mlxdata, x, dx, y, dy);
 			ft_draw_single_pixel(mlxdata, x, y, dx, dy, max_iter);
 		}
 	}
