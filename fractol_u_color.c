@@ -6,29 +6,11 @@
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 20:31:45 by mman              #+#    #+#             */
-/*   Updated: 2024/01/03 00:26:15 by mman             ###   ########.fr       */
+/*   Updated: 2024/01/03 01:52:26 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
-
-void	ft_color_switch(t_mlxdata *mlxdata)
-{
-	if (mlxdata->color_logic == 1)
-	{
-		mlxdata->color_logic = 2;
-		ft_pntf("Switched to color mode 2\n");
-	}
-	else if (mlxdata->color_logic == 2)
-	{
-		mlxdata->color_logic = 1;
-		ft_pntf("Switched to color mode 1\n");
-	}
-	printf("%f, %f, %f, %f --- %f\n", mlxdata->min.real, mlxdata->max.real, mlxdata->min.imag, mlxdata->max.imag, mlxdata->zoom);
-	// -0.845634, 3.154366, -0.345634, 2.654366 --- 0.001808
-	// -0.842690, 3.157310, 0.190110, 3.190110 --- 0.000114
-	// mlxdata->min.real, mlxdata->max.real, mlxdata->min.imag, mlxdata->max.imag, mlxdata->zoom
-}
 
 // #include <math.h>
 
@@ -69,85 +51,171 @@ void	ft_color_switch(t_mlxdata *mlxdata)
 //     *b = (int)((1 - blend_factor) * *b + blend_factor * orange_b);
 // }
 
+#include <math.h>
+
+// Function to convert HSL to RGB
+static void hsl_to_rgb(double h, double s, double l, int *r, int *g, int *b) {
+    double c = (1 - fabs(2 * l - 1)) * s;
+    double x = c * (1 - fabs(fmod(h / 60.0, 2) - 1));
+    double m = l - c / 2.0;
+
+    double r_temp, g_temp, b_temp;
+
+    if (h >= 0 && h < 60) {
+        r_temp = c;
+        g_temp = x;
+        b_temp = 0;
+    } else if (h >= 60 && h < 120) {
+        r_temp = x;
+        g_temp = c;
+        b_temp = 0;
+    } else if (h >= 120 && h < 180) {
+        r_temp = 0;
+        g_temp = c;
+        b_temp = x;
+    } else if (h >= 180 && h < 240) {
+        r_temp = 0;
+        g_temp = x;
+        b_temp = c;
+    } else if (h >= 240 && h < 300) {
+        r_temp = x;
+        g_temp = 0;
+        b_temp = c;
+    } else {
+        r_temp = c;
+        g_temp = 0;
+        b_temp = x;
+    }
+
+    *r = (int)((r_temp + m) * 255);
+    *g = (int)((g_temp + m) * 255);
+    *b = (int)((b_temp + m) * 255);
+}
+
+static int ft_calculate_color_zero(int iteration, int max_iter, t_mlxdata *mlxdata, int x, int y)
+{
+    double	t;
+    int		modifier;
+    double	h;
+    double	s;
+    double	l;
+    int		r, g, b;
+    int		result;
+
+    t = (double)iteration / max_iter;
+    modifier = -121 % 16;
+    h = mlxdata->c_offset + t * 360.0; // Use hue in degrees
+    s = 1.0; // Full saturation
+    l = 0.5; // Medium lightness
+
+    hsl_to_rgb(h, s, l, &r, &g, &b);
+
+    result = 0;
+    for (int i = (modifier % 3); i < 3; ++i) // Adjust the starting point based on modifier
+    {
+        int shift_amount = 8 * i;
+        int component;
+
+        if (i == 0)
+            component = r;
+        else if (i == 1)
+            component = g;
+        else
+            component = b;
+
+        result |= (component << shift_amount);
+    }
+
+    return (result);
+}
 
 
 int ft_calculate_color(int iteration, int max_iter, t_mlxdata *mlxdata, int x, int y)
 {
-	double t = (double)iteration / max_iter;
-	double angle;
-	int r, g, b;
-	int offset;
-	int priority;
-	double t_squared;
-	double t_cubed;
-	double gradient;
-	double phase_shift;
-	int i;
-	int r_component, g_component, b_component;
+    double t = (double)iteration / max_iter;
+    double angle;
+    int r, g, b;
+    int offset;
+    int priority;
+    double t_squared;
+    double t_cubed;
+    double gradient;
+    double phase_shift;
+    int i;
+    int r_component, g_component, b_component;
 
-	if (iteration == max_iter)
-		return 0x000000;
+    if (iteration == max_iter)
+        return 0x000000;
 
-	angle = 2 * M_PI * t;
-	r = g = b = 0;
+    angle = 2 * M_PI * t + mlxdata->c_offset;
+    r = g = b = 0;
 
-	if (x == WIDTH / 2 && y == HEIGHT / 2)
-	{
-		r = g = b = (int)(255 * (0.7 + 0.3 * t));
-	}
-	else if (mlxdata->color_logic == 1)
-	{
-		offset = mlxdata->c_offset;
-		priority = 3 % 20;
-		t_squared = t * t;
-		t_cubed = t_squared * t;
-		gradient = sin(2 * M_PI * t);
-		phase_shift = M_PI / 2;
-		i = 0;
+    if (x == WIDTH / 2 && y == HEIGHT / 2)
+    {
+        r = g = b = (int)(255 * (0.7 + 0.3 * t));
+    }
+    else if (mlxdata->color_logic == 1)
+    {
+        offset = mlxdata->c_offset;
+        priority = 3 % 20;
+        t_squared = t * t;
+        t_cubed = t_squared * t;
+        gradient = sin(2 * M_PI * t + angle);
+        phase_shift = M_PI / 2;
+        i = 0;
 
-		while (i < priority)
-		{
-			double temp = gradient;
-			gradient = cos(2 * M_PI * t + phase_shift);
-			phase_shift += M_PI / 2;
-			i++;
-		}
+        while (i < priority)
+        {
+            double temp = gradient;
+            gradient = cos(2 * M_PI * t + phase_shift + angle);
+            phase_shift += M_PI / 2;
+            i++;
+        }
 
-		r = (int)((1 + gradient) * 0.5 * 255);
-		g = (int)((1 + sin(2 * M_PI * t + phase_shift)) * 0.5 * 255);
-		b = (int)((1 + cos(2 * M_PI * t + phase_shift)) * 0.5 * 255);
-	}
-	else if (mlxdata->color_logic == 2)
-	{
-		offset = mlxdata->c_offset;
-		priority = (offset % 3);
-		r_component = (int)(9 * (1 - t) * t * t * t * 255);
-		g_component = (int)(15 * (1 - t) * (1 - t) * t * t * 255);
-		b_component = (int)(8.5 * (1 - t) * (1 - t) * (1 - t) * t * 255);
+        r = (int)((1 + gradient) * 0.5 * 255);
+        g = (int)((1 + sin(2 * M_PI * t + phase_shift + angle)) * 0.5 * 255);
+        b = (int)((1 + cos(2 * M_PI * t + phase_shift + angle)) * 0.5 * 255);
+    }
+    else if (mlxdata->color_logic == 2)
+    {
+        offset = mlxdata->c_offset;
+        priority = (offset % 3);
+        r_component = (int)(9 * (1 - t) * t * t * t * 255);
+        g_component = (int)(15 * (1 - t) * (1 - t) * t * t * 255);
+        b_component = (int)(8.5 * (1 - t) * (1 - t) * (1 - t) * t * 255);
 
-		if (priority == 0)
-		{
-			r = r_component;
-			g = g_component;
-			b = b_component;
-		}
-		else if (priority == 1)
-		{
-			r = g_component;
-			g = b_component;
-			b = r_component;
-		}
-		else
-		{
-			r = b_component;
-			g = r_component;
-			b = g_component;
-		}
-	}
-	else
-	{
-		return 0x000000;
-	}
+        if (priority == 0)
+        {
+            r = r_component;
+            g = g_component;
+            b = b_component;
+        }
+        else if (priority == 1)
+        {
+            r = g_component;
+            g = b_component;
+            b = r_component;
+        }
+        else
+        {
+            r = b_component;
+            g = r_component;
+            b = g_component;
+        }
 
-	return (r << 16) | (g << 8) | b;
+        // Increment the hue offset to cycle through shades
+        mlxdata->c_offset += 0.001; // Adjust the increment as needed
+    }
+    else if (mlxdata->color_logic == 0)
+    {
+        // Call the function for color logic 0
+        return ft_calculate_color_zero(iteration, max_iter, mlxdata, x, y);
+    }
+    else
+    {
+        return 0x000000;
+    }
+
+    return (r << 16) | (g << 8) | b;
 }
+

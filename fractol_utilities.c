@@ -6,7 +6,7 @@
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 20:31:45 by mman              #+#    #+#             */
-/*   Updated: 2024/01/02 23:15:25 by mman             ###   ########.fr       */
+/*   Updated: 2024/01/03 02:47:34 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,13 @@ void	ft_error(char *str)
 	ft_pntf("error");
 	ft_pntf(str);
 	ft_pntf("\n\n\n");
+	ft_pntf("controls: w, a s d");
+	ft_pntf("         : zoom in    -    ;");
+	ft_pntf("         : zoom out   -    :");
+	ft_pntf("         : Reset      -    -");
+	ft_pntf("         : color move -    q, e");
+	ft_pntf("         : color mode -    0");
+	ft_pntf("thanks, come again");
 	exit(EXIT_FAILURE);
 }
 
@@ -36,7 +43,8 @@ void	ft_error_check(char *set)
 {
 	if (ft_strncmp("julia", set, 5) != 0
 		&& ft_strncmp("mandelbrot", set, 10) != 0
-		&& ft_strncmp("mandeltri", set, 9) != 0)
+		&& ft_strncmp("mandeltri", set, 9) != 0
+		&& ft_strncmp("ship", set, 4) != 0)
 		ft_error("Usage: ./fractol [mandelbrot/julia x y/mandeltri]");
 }
 

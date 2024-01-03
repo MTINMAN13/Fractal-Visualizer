@@ -6,7 +6,7 @@
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 23:28:02 by mman              #+#    #+#             */
-/*   Updated: 2024/01/03 00:32:25 by mman             ###   ########.fr       */
+/*   Updated: 2024/01/03 00:36:28 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	ft_process_julia_patterns(int keycode, t_mlxdata *mlxdata)
 		ft_assign_julia(mlxdata, -0.77803, 0.134);
 	else if (keycode == 504) // 5
 		ft_assign_julia(mlxdata, -0.654760, -0.688200);
-	else if (keycode == 105) // i
+	else if (keycode == 105) // imake 
 		mlxdata->julia.imag+= 0.001;
 	else if (keycode == 107) // k
 		mlxdata->julia.imag += -0.001;

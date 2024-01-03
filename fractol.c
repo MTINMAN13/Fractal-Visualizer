@@ -6,39 +6,17 @@
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/23 17:11:13 by mman              #+#    #+#             */
-/*   Updated: 2024/01/03 00:19:03 by mman             ###   ########.fr       */
+/*   Updated: 2024/01/03 02:50:16 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
-
-/*                   B O N U S                                                     .
-One more different fractal (more than a hundred different types of fractals are
-referenced online).
-• The zoom follows the actual mouse position. ✅
-• In addition to the zoom: moving the view by pressing the arrows keys. ✅
-                                                                                  .
-*/
-
-/*                   DONE                                                     .
-
-mouse 4 and 5 zoom in and out ✅
-Your program must offer the Julia set and the Mandelbrot set.✅
-You must be able to create different Julia sets by passing different parameters to
-the program.
-A parameter is passed on the command line to define what type of fractal will be
-displayed in a window.✅
 /*                   T O D O                                                     .
-
-◦ You can handle more parameters to use them as rendering options.
-◦ If no parameter is provided, or if the parameter is invalid, the program displays
-	a list of available parameters and exits properly.
-•solve leaks in memory
-• Make the color range shift.
-                                                                                  .
-*/
-
+- MEMORY LEAKS
+- COPY SOMEONES (freeware) RGB LOGIC
+(remove comments, statements, formatting)
 // wuki edge of seventeen
+*/
 
 int	ft_mlx_init(char *set, t_mlxdata *mlxdata, char **argv, int argc)
 {
@@ -58,14 +36,19 @@ int	ft_mlx_init(char *set, t_mlxdata *mlxdata, char **argv, int argc)
 		if (argc <= 2)
 			ft_julia_error();
 		mlxdata->draw_function = ft_draw_julia;
-		ft_default_zoom_j(mlxdata, argv);
+		mlxdata->julia.real = ft_atoidouble(argv[2]);
+		mlxdata->julia.imag = ft_atoidouble(argv[3]);
+		ft_default_zoom_j(mlxdata, mlxdata->julia.real, mlxdata->julia.imag);
 	}
-	else if (ft_strncmp(set, "tricorn", ft_strlen(set)) == 0)
+	else if (ft_strncmp(set, "mandeltri", ft_strlen(set)) == 0)
 	{
-		if (argc <= 2)
-			ft_julia_error();
-		mlxdata->draw_function = ft_draw_julia;
-		ft_default_zoom_j(mlxdata, argv);
+		mlxdata->draw_function = ft_draw_mandelbar;
+		ft_default_zoom(mlxdata);
+	}
+	else if (ft_strncmp(set, "ship", ft_strlen(set)) == 0)
+	{
+		mlxdata->draw_function = ft_draw_burning_ship;
+		ft_default_zoom(mlxdata);
 	}
 	return (0);
 }

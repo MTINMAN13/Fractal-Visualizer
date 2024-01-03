@@ -6,7 +6,7 @@
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/23 17:11:13 by mman              #+#    #+#             */
-/*   Updated: 2024/01/03 00:19:54 by mman             ###   ########.fr       */
+/*   Updated: 2024/01/03 01:49:39 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,19 +108,19 @@ int		ft_mandelbrot_iteration(t_complex c, int max_iter)
 
 static void ft_process_pixel(register t_mlxdata *mlxdata, register int x, register int y, register long double dx, register long double dy, int max_iter)
 {
-    t_complex c;
-    int iter;
-    int color;
-    int pixel_index;
+	t_complex	c;
+	int			iter;
+	int			color;
+	int			pixel_index;			
 
-    c.real = mlxdata->min.real + (long double)x * dx * mlxdata->zoom;
-    c.imag = mlxdata->min.imag + (long double)y * dy * mlxdata->zoom;
-    iter = ft_mandelbrot_iteration(c, max_iter);
-    color = ft_calculate_color(iter, max_iter, mlxdata, x, y);
-    pixel_index = (y * mlxdata->line_length) + (x * (mlxdata->bits_per_pixel / 8));
-    mlxdata->addr[pixel_index] = color >> 16;     // Red
-    mlxdata->addr[pixel_index + 1] = color >> 8;  // Green
-    mlxdata->addr[pixel_index + 2] = color;       // Blue
+	c.real = mlxdata->min.real + (long double)x * dx * mlxdata->zoom;
+	c.imag = mlxdata->min.imag + (long double)y * dy * mlxdata->zoom;
+	iter = ft_mandelbrot_iteration(c, max_iter);
+	color = ft_calculate_color(iter, max_iter, mlxdata, x, y);
+	pixel_index = (y * mlxdata->line_length) + (x * (mlxdata->bits_per_pixel / 8));
+	mlxdata->addr[pixel_index] = color >> 16;     // Red
+	mlxdata->addr[pixel_index + 1] = color >> 8;  // Green
+	mlxdata->addr[pixel_index + 2] = color;       // Blue
 }
 
 #pragma GCC diagnostic pop

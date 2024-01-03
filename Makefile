@@ -20,7 +20,7 @@ INCLUDE = include
 SRC_FILES = fractol \
 			fractol_hooks_keys fractol_hooks_mouse fractol_hooks \
 			fractol_hooks_keysII \
-			fractol_julia fractol_mandelbrot fractol_mandeltri \
+			fractol_julia fractol_mandelbrot fractol_mandeltri fractol_ship \
 			fractol_u_color fractol_utilities fractol_default_zoom_values \
 			fractol_u_shift_color
 

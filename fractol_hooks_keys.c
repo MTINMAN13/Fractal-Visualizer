@@ -6,7 +6,7 @@
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 15:51:19 by mman              #+#    #+#             */
-/*   Updated: 2024/01/02 23:57:29 by mman             ###   ########.fr       */
+/*   Updated: 2024/01/03 02:12:41 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,13 @@ static void	ft_process_other_keys(int keycode, t_mlxdata *mlxdata)
 	else if (keycode == 167 || keycode == 39 || keycode == 65451) // : (ZOOM IN)
 		ft_zoom_in(mlxdata, WIDTH / 2, HEIGHT / 2, 1.0 / 1.1);
 	else if (keycode == 61) // - (RESET)
-		ft_default_zoom(mlxdata);
+	{
+        // Check the current draw function and call the appropriate zoom function
+        if (mlxdata->draw_function == ft_draw_julia)
+            ft_default_zoom_j(mlxdata, mlxdata->julia.real, mlxdata->julia.imag);
+        else if (mlxdata->draw_function == ft_draw_mandelbrot)
+            ft_default_zoom(mlxdata);
+    }
 	else if (keycode == 0)
 	{
 		ft_pntf("REAL: %i \nIMAG: %i \nZOOM; %i", mlxdata->min.real, mlxdata->max.imag, mlxdata->zoom);
