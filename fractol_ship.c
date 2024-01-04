@@ -6,14 +6,14 @@
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 02:38:42 by mman              #+#    #+#             */
-/*   Updated: 2024/01/03 15:57:20 by mman             ###   ########.fr       */
+/*   Updated: 2024/01/04 18:19:53 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
 
-// z^2 + c^0.2
 // Burning Ship Fractal
+
 static int	ft_burning_ship_iteration(t_complex c, int max_iter)
 {
 	t_complex	z;
