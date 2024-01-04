@@ -6,7 +6,7 @@
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/23 17:11:13 by mman              #+#    #+#             */
-/*   Updated: 2024/01/04 18:22:40 by mman             ###   ########.fr       */
+/*   Updated: 2024/01/04 19:47:39 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	main(int argc, char **argv)
 	t_mlxdata	mlxdata;
 
 	ft_mlx_init(argv[1], &mlxdata, argv, argc);
-	mlxdata.draw_function(&mlxdata, MAXIMUM_I);
+	mlxdata.draw_function(&mlxdata, MAXIMUM_I * ft_influence(&mlxdata));
 	mlx_put_image_to_window(mlxdata.mlx, mlxdata.win, mlxdata.img, 0, 0);
 	setup_event_hooks(&mlxdata);
 	mlx_loop(mlxdata.mlx);

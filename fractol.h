@@ -6,7 +6,7 @@
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/19 20:45:12 by mman              #+#    #+#             */
-/*   Updated: 2024/01/03 18:21:42 by mman             ###   ########.fr       */
+/*   Updated: 2024/01/04 19:47:20 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,8 @@ void	ft_process_other_keys(int keycode, t_mlxdata *mlxdata);
 void	ft_default_zoom(t_mlxdata *mlxdata);
 void	ft_default_zoom_j(t_mlxdata *mlxdata, double real, double imag);
 void	ft_default_zoom_mtri(t_mlxdata *mlxdata);
+double	ft_influence(t_mlxdata *mlxdata);
+
 // col
 void	ft_color_switch(t_mlxdata *mlxdata);
 void	ft_process_color_shift(int keycode, t_mlxdata *mlxdata);
@@ -98,7 +100,7 @@ void	ft_switch(char *set, t_mlxdata *mlxdata, char **argv, int argc);
 int		ft_mlx_init(char *set, t_mlxdata *mlxdata, char **argv, int argc);
 
 
-// Mandelbrot 
+// Mandelbrot
 // new
 int		ft_mandelbrot_iteration(t_complex c, int max_iter);
 int		ft_calculate_color(int iteration, int max_iter,

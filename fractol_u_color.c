@@ -6,7 +6,7 @@
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 20:31:45 by mman              #+#    #+#             */
-/*   Updated: 2024/01/03 16:10:48 by mman             ###   ########.fr       */
+/*   Updated: 2024/01/04 20:22:49 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,3 +219,43 @@ int ft_calculate_color(int iteration, int max_iter, t_mlxdata *mlxdata, int x, i
     return (r << 16) | (g << 8) | b;
 }
 
+double	ft_influence(t_mlxdata *mlxdata)
+{
+	if (mlxdata->zoom > 0.3)
+		return (1.0);
+	else if (mlxdata->zoom > 0.2)
+		return (0.5);
+	else if (mlxdata->zoom > 0.1 && mlxdata->zoom < 0.2)
+		return (0.8);
+	else if (mlxdata->zoom > 0.05 && mlxdata->zoom < 0.1)
+		return (0.85);
+	else if (mlxdata->zoom > 0.01 && mlxdata->zoom < 0.05)
+		return (0.95);
+	else if (mlxdata->zoom > 0.0003 && mlxdata->zoom < 0.01)
+		return (1.2);
+	else if (mlxdata->zoom > 0.00004 && mlxdata->zoom < 0.0003)
+		return (1.6);
+	else if (mlxdata->zoom > 0.0000001 && mlxdata->zoom < 0.00004)
+		return (2.0);
+	else if (mlxdata->zoom > 0.000000001 && mlxdata->zoom < 0.0000001)
+		return (4.0);
+	else if (mlxdata->zoom > 0.000000000001 && mlxdata->zoom < 0.000000001)
+		return (8.0);
+	else if (mlxdata->zoom > 0.000000000000001
+		&& mlxdata->zoom < 0.000000000001)
+		return (12.0);
+	return (15.0);
+}
+
+// double ft_influence(t_mlxdata *mlxdata)
+// {
+//     double threshold = 0.3;
+//     double value = 1.0;
+
+//     while (mlxdata->zoom <= threshold && threshold > 0.000000000000001) {
+//         threshold /= 10.0;
+//         value *= 2.0;
+//     }
+
+//     return value;
+// }
