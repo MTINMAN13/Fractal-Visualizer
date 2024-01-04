@@ -6,7 +6,7 @@
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/23 17:11:13 by mman              #+#    #+#             */
-/*   Updated: 2024/01/04 18:21:00 by mman             ###   ########.fr       */
+/*   Updated: 2024/01/04 18:22:40 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,5 +35,6 @@ int	main(int argc, char **argv)
 	setup_event_hooks(&mlxdata);
 	mlx_loop(mlxdata.mlx);
 	ft_cleanup_all(&mlxdata);
+
 	return (EXIT_SUCCESS);
 }
