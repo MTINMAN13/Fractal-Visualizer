@@ -6,7 +6,7 @@
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 15:51:19 by mman              #+#    #+#             */
-/*   Updated: 2024/01/02 23:57:29 by mman             ###   ########.fr       */
+/*   Updated: 2024/01/08 18:43:12 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ static void	ft_process_other_keys(int keycode, t_mlxdata *mlxdata)
 		ft_zoom_out(mlxdata, WIDTH / 2, HEIGHT / 2, 1.1);
 	else if (keycode == 167 || keycode == 39 || keycode == 65451) // : (ZOOM IN)
 		ft_zoom_in(mlxdata, WIDTH / 2, HEIGHT / 2, 1.0 / 1.1);
-	else if (keycode == 61) // - (RESET)
+	else if (keycode == 61 || keycode == 45) // - (RESET)
 		ft_default_zoom(mlxdata);
 	else if (keycode == 0)
 	{
