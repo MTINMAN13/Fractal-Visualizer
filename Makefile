@@ -34,15 +34,22 @@ LFLAGS = -Lminilibx -lmlx -lXext -lX11 -lm #okay this cost me .... fml lol
 
 # Rule to compile .c files into .o files
 $(OBJ_DIR)/%.o: %.c
-	$(CC) $(CFLAGS) -I$(INCLUDE) -c $< -o $@ 
+	$(CC) $(CFLAGS) -I$(INCLUDE) -c $< -o $@
+
+all:
+	$(NAME)
+	bonus
+
+bonus:
+	# todo
 
 # Rule to build the executable  and run
-$(NAME): libft $(OBJ)
+$(NAME): minlibx libft $(OBJ)
 	$(CC) $(CFLAGS) -o $@ $(OBJ) $(LIBFT) $(LFLAGS)
-	# @clear 
+	# @clear
 	@echo "$(CLR2)rdy$(DEF_COLOR)"
 
-minlibx: 
+minlibx:
 		@ make -C minilibx/
 
 libft:

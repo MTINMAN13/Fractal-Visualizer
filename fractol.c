@@ -6,14 +6,16 @@
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/23 17:11:13 by mman              #+#    #+#             */
-/*   Updated: 2024/01/04 19:47:39 by mman             ###   ########.fr       */
+/*   Updated: 2024/01/04 20:25:41 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
 
 /*                   T O D O                                   .
-- COPY SOMEONES (freeware) RGB LOGIC
+- COPY SOMEONES (freeware) RGB LOGIC -- a.k.a. i need to find out which is the
+										goddamn correlation between the t and the
+										color
 
 - To turn in bonuses to your project, you must include a rule bonus to your
 Makefile, which will add all the various headers, librairies or functions that
