@@ -72,8 +72,8 @@ typedef struct	s_win_list
 	Window				window;
 	GC					gc;
 	struct s_win_list	*next;
-	int					(*mouse_hook)();
-	int					(*key_hook)();
+	int					(*ft_mouse_hook)();
+	int					(*ft_key_hook)();
 	int					(*expose_hook)();
 	void				*mouse_param;
 	void				*key_param;

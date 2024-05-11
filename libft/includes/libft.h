@@ -6,7 +6,7 @@
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/16 17:18:00 by mman              #+#    #+#             */
-/*   Updated: 2023/11/22 19:22:01 by mman             ###   ########.fr       */
+/*   Updated: 2024/01/03 17:19:34 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,17 @@ typedef struct s_list
 	void			*content;
 	struct s_list	*next;
 }					t_list;
+
+typedef struct s_double
+{
+	double	result;
+	double	sign;
+	double	decimal;
+	int		i;
+}		t_double;
+
 int			ft_atoi(const char *str);
+double		ft_atoidouble(const char *str);
 int			ft_atoi_base(char *str, char *base);
 void		*ft_calloc(size_t count, size_t size);
 int			ft_isalnum(int c);

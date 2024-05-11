@@ -1,23 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fractol_mandelbrot.c                               :+:      :+:    :+:   */
+/*   fractol_ship.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mman <mman@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/23 17:11:13 by mman              #+#    #+#             */
-/*   Updated: 2024/05/11 20:35:50 by mman             ###   ########.fr       */
+/*   Created: 2024/01/03 02:38:42 by mman              #+#    #+#             */
+/*   Updated: 2024/05/11 20:36:02 by mman             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
 
-int	ft_mandelbrot_iteration(t_complex c, int max_iter)
+// Burning Ship Fractal
+
+static int	ft_burning_ship_iteration(t_complex c, int max_iter)
 {
 	t_complex	z;
 	int			iter;
-	double		real_tmp;
-	double		imag_tmp;
+	long double	real_tmp;
+	long double	imag_tmp;
 
 	z.real = 0;
 	z.imag = 0;
@@ -25,10 +27,10 @@ int	ft_mandelbrot_iteration(t_complex c, int max_iter)
 	while (iter < max_iter)
 	{
 		real_tmp = z.real * z.real - z.imag * z.imag + c.real;
-		imag_tmp = 2 * z.real * z.imag + c.imag;
+		imag_tmp = fabsl(2 * z.real * z.imag) + c.imag;
 		z.real = real_tmp;
 		z.imag = imag_tmp;
-		if (z.real * z.real + z.imag * z.imag > 4)
+		if (sqrtl(z.real * z.real + z.imag * z.imag) > 2)
 			break ;
 		iter++;
 	}
@@ -44,7 +46,7 @@ static void	ft_process_pixel(t_mlxdata *mlxdata, int x, int y, long double dx)
 
 	c.real = mlxdata->min.real + (long double)x * dx * mlxdata->zoom;
 	c.imag = mlxdata->min.imag + (long double)y * dx * mlxdata->zoom;
-	iter = ft_mandelbrot_iteration(c, mlxdata->max_iter);
+	iter = ft_burning_ship_iteration(c, mlxdata->max_iter);
 	color = ft_calculate_color(iter, mlxdata, x, y);
 	pixel_index = (y * mlxdata->line_length)
 		+ (x * (mlxdata->bits_per_pixel / 8));
@@ -53,16 +55,14 @@ static void	ft_process_pixel(t_mlxdata *mlxdata, int x, int y, long double dx)
 	mlxdata->addr[pixel_index + 2] = color;
 }
 
-void	ft_draw_mandelbrot(t_mlxdata *mlxdata, int max_iter)
+void	ft_draw_burning_ship(t_mlxdata *mlxdata, int max_iter)
 {
 	int			x;
 	int			y;
 	long double	dx;
-	long double	dy;
 
-	mlxdata->max_iter = max_iter;
+	mlxdata->max_iter = max_iter * 0.8;
 	dx = (mlxdata->max.real - mlxdata->min.real) / WIDTH;
-	dy = (mlxdata->max.imag - mlxdata->min.imag) / HEIGHT;
 	y = -1;
 	while (++y < HEIGHT)
 	{

@@ -3,6 +3,8 @@
 		"keysym.h": "c",
 		"mlx.h": "c",
 		"fractol.h": "c",
-		"limits": "c"
+		"limits": "c",
+		"functional": "c",
+		"random": "c"
 	}
 }

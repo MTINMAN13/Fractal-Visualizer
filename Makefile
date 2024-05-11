@@ -8,7 +8,7 @@ CLR1 = \033[0;48m  # Complementary orangeish color with a random last digit
 
 
 CC = cc
-CFLAGS = #-Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra
 RM = rm -rf
 
 # Directories
@@ -20,9 +20,11 @@ INCLUDE = include
 SRC_FILES = fractol \
 			fractol_hooks_keys fractol_hooks_mouse fractol_hooks \
 			fractol_hooks_keysII \
-			fractol_julia fractol_mandelbrot fractol_mandeltri \
-			fractol_u_color fractol_utilities fractol_default_zoom_values \
-			fractol_u_shift_color
+			fractol_julia fractol_mandelbrot fractol_mandeltri fractol_ship \
+			\
+			fractol_u_shift_color fractol_default_zoom_values \
+			fractol_u_color fractol_u_colooor fractol_u_clrtools \
+			fractol_utilities_errors fractol_utilities_runtime
 
 SRC = $(addsuffix .c, $(SRC_FILES))
 OBJ = $(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(SRC_FILES)))
@@ -33,14 +35,23 @@ LFLAGS = -Lminilibx -lmlx -lXext -lX11 -lm #okay this cost me .... fml lol
 
 # Rule to compile .c files into .o files
 $(OBJ_DIR)/%.o: %.c
-	$(CC) $(CFLAGS) -I$(INCLUDE) -c $< -o $@ 
+	mkdir -p obj
+	$(CC) $(CFLAGS) -I$(INCLUDE) -c $< -o $@
 
 # Rule to build the executable  and run
-$(NAME): libft $(OBJ)
+$(NAME): minlibx libft $(OBJ)
 	$(CC) $(CFLAGS) -o $@ $(OBJ) $(LIBFT) $(LFLAGS)
-	# @clear 
+	# @clear
 	@echo "$(CLR2)rdy$(DEF_COLOR)"
 
+all:
+	make $(NAME)
+
+bonus:
+	# todo
+
+minlibx:
+		@ make -C minilibx/
 
 libft:
 		@ make -C libft/
@@ -55,18 +66,20 @@ clean:
 fclean: clean
 		@ $(RM) $(NAME)
 		@ $(RM) libft.a
+		@ $(RM) obj
 		@ make -C libft/ clean
 		@clear
 		@echo "$(CLR1)               all wiped boss! have a nice day ;-)$(DEF_COLOR)"
 		@sleep 1
 		@clear
 
-re: clean all $(NAME)
+re:	fclean
+	make $(NAME)
 	@sleep 1
 
 norm:
 		@clear
-		@norminette $(NAME).c $(NAME).h
+		@norminette $(addsuffix .c, $(SRC_FILES)) $(NAME).h
 
 julia:
 		make $(NAME)
@@ -96,7 +109,7 @@ run:
 		@echo "$(CLR2)--------- clean program run ---------$(DEF_COLOR)"
 
 valgrind:
-		valgrind --leak-check=full --show-leak-kinds=all ./$(NAME)
+		valgrind --leak-check=full --show-leak-kinds=all ./$(NAME) mandelbrot
 
 
 .PHONY: all libft clean fclean re norm $(NAME) run
